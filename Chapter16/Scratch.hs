@@ -98,12 +98,10 @@ c = fmap (*2) (\x -> x - 2)
 d = fmap ((return '1' ++) . show) (\x -> [x, 1..3])
 
 -- 5
-{- e :: IO Integer
+e :: IO Integer
 e = let ioi = readIO "1" :: IO Integer
-        changed = read ("123"++) show ioi
-    in (*3) changed
--}
--- PASS
+        changed = read <$> ("123" ++) <$> show <$> ioi   -- Cheated here, otherwise lolwut
+    in fmap (*3) changed
 
 -- 16.8 - Transforming the unapplied type argument
 
@@ -130,8 +128,93 @@ prop_functorCompose f g x = (fmap g (fmap f x)) == (fmap (g . f) x)
 
 -- 1
 
-{-
-newtype Identity a = Identity a
+newtype Identity a = Identity a deriving (Eq, Show)
 instance Functor Identity where
-  fmap _ (Identity a) = Identity a
--}
+  fmap f (Identity a) = Identity (f a)
+
+-- 2
+
+data Pair a = Pair a a deriving (Eq, Show)
+instance Functor Pair where
+  fmap f (Pair x y) = Pair (f x) (f y)
+
+-- 3
+
+data Two' a b = Two' a b deriving (Eq, Show)
+instance Functor (Two' a) where
+  fmap f (Two' x y) = Two' x (f y)
+
+-- 4
+
+data Three a b c = Three a b c deriving (Eq, Show)
+instance Functor (Three a b) where
+  fmap f (Three x y z) = Three x y (f z)
+
+-- 5
+
+data Three' a b = Three' a b b deriving (Eq, Show)
+instance Functor (Three' a) where
+  fmap f (Three' x y z) = Three' x (f y) (f z)
+
+-- 6
+
+data Four a b c d = Four a b c d deriving (Eq, Show)
+instance Functor (Four a b c) where
+  fmap f (Four w x y z) = Four w x y (f z)
+
+-- 7
+
+data Four' a b = Four' a a a b deriving (Eq, Show)
+instance Functor (Four' a) where
+  fmap f (Four' w x y z) = Four' w x y (f z)
+
+-- 8
+
+data Trivial = Trivial
+-- No, because there isn't a type variable.
+
+-- 16.11 - Ignoring possibilities
+
+-- Meh
+
+incIfJust :: Num a => Maybe a -> Maybe a
+incIfJust (Just n) = Just $ n + 1
+incIfJust Nothing  = Nothing
+
+showIfJust :: Show a => Maybe a -> Maybe String
+showIfJust (Just s) = Just $ show s
+showIfJust Nothing = Nothing
+
+-- Better
+
+incMaybe :: Num a => Maybe a -> Maybe a
+incMaybe m = fmap (+1) m
+
+showMaybe :: Show a => Maybe a -> Maybe String
+showMaybe s = fmap show s
+
+-- A little better
+
+incMaybe' :: Num a => Maybe a -> Maybe a
+incMaybe' = fmap (+1)
+
+showMaybe' :: Show a => Maybe a -> Maybe String
+showMaybe' = fmap show
+
+-- Even better
+
+liftedInc :: (Functor f, Num a) => f a -> f a
+liftedInc = fmap (+1)
+
+liftedShow :: (Functor f, Show a) => f a -> f String
+liftedShow = fmap show
+
+-- Exercise: Possibly
+
+data Possibly a = LolNope | Yeppers a deriving (Eq, Show)
+instance Functor Possibly where
+  fmap _ LolNope     = LolNope
+  fmap f (Yeppers a) = Yeppers (f a)
+
+
+-- cont. p. 1021
