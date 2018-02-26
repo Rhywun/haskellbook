@@ -175,7 +175,7 @@ data Trivial = Trivial
 
 -- 16.11 - Ignoring possibilities
 
--- Meh
+-- Maybe: Meh
 
 incIfJust :: Num a => Maybe a -> Maybe a
 incIfJust (Just n) = Just $ n + 1
@@ -216,5 +216,40 @@ instance Functor Possibly where
   fmap _ LolNope     = LolNope
   fmap f (Yeppers a) = Yeppers (f a)
 
+-- Either: Meh
 
--- cont. p. 1021
+incIfRight :: Num a => Either e a -> Either e a
+incIfRight (Right n) = Right $ n + 1
+incIfRight (Left e)  = Left e
+
+showIfRight :: Show a => Either e a -> Either e String
+showIfRight (Right s) = Right $ show s
+showIfRight (Left e)  = Left e
+
+-- Better
+
+incEither :: Num a => Either e a -> Either e a
+incEither m = fmap (+1) m
+
+showEither :: Show a => Either e a -> Either e String
+showEither s = fmap show s
+
+-- A little better
+
+incEither' :: Num a => Either e a -> Either e a
+incEither' = fmap (+1)
+
+showEither' :: Show a => Either e a -> Either e String
+showEither' = fmap show
+
+-- Even better: see `liftedInc` and `liftedShow` above
+
+-- Short Exercise
+
+data Sum a b = First' a | Second' b deriving (Eq, Show)
+instance Functor (Sum a) where
+  fmap _ (First' a)  = First' a
+  fmap f (Second' b) = Second' (f b)
+
+
+-- Cont. p. 1024
