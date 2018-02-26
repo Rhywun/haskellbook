@@ -1,3 +1,5 @@
+{-# LANGUAGE RankNTypes #-}
+
 module Chapter16.Scratch where
 
 {-
@@ -122,7 +124,7 @@ prop_functorIdentity :: (Functor f, Eq (f a)) => f a -> Bool
 prop_functorIdentity f = fmap id f == f
 
 prop_functorCompose :: (Functor f, Eq (f c)) => (a -> b) -> (b -> c) -> f a -> Bool
-prop_functorCompose f g x = (fmap g (fmap f x)) == (fmap (g . f) x)
+prop_functorCompose f g x = fmap g (fmap f x) == fmap (g . f) x
 
 -- 16.10 - Exercises: Instances of Func
 
@@ -251,5 +253,35 @@ instance Functor (Sum a) where
   fmap _ (First' a)  = First' a
   fmap f (Second' b) = Second' (f b)
 
+-- 16.13 - More structure, more functors
 
--- Cont. p. 1024
+data Wrap f a = Wrap (f a) deriving (Eq, Show)
+instance Functor f => Functor (Wrap f) where
+  fmap f (Wrap fa) = Wrap (fmap f fa)
+
+-- 16.4 - IO Functor
+
+getInt :: IO Int
+getInt = fmap read getLine
+
+bumpIt :: IO Int
+bumpIt = do
+  intVal <- getInt
+  return (intVal + 1)
+
+-- 16.15 - What if we want to do something different?
+
+-- nat :: (f -> g) -> f a -> g a
+
+type Nat f g = forall a . f a -> g a
+
+maybeToList :: Nat Maybe []
+maybeToList Nothing  = []
+maybeToList (Just a) = [a]
+
+{-
+degenerateMtl :: Nat Maybe []
+degenerateMtl Nothing  = []
+degenerateMtl (Just a) = [a + 1]
+-}
+
