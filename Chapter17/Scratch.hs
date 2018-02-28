@@ -151,5 +151,34 @@ instance Monoid a => Applicative (Constant a) where
   pure _ = Constant { getConstant = mempty }
   (<*>) (Constant x) (Constant y) = Constant (mappend x y)
 
+-- Maybe Applicative
+-- see maybe.hs
 
--- cont. p. 1083
+-- Exercise: Fixer Upper
+
+fu1 = const <$> Just "Hello" <*> pure "World"
+
+fu2 = (,,,) <$> Just 90 <*> Just 10 <*> Just "Tierness" <*> pure [1, 2, 3]
+
+-- 17.6 - Applicative laws
+
+{-
+-- Identity
+pure id <*> v = v
+
+pure id <*> Just "hello"              -- Just "hello"
+-}
+
+{-
+-- Composition
+pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
+
+pure (.) <*> [(+1)] <*> [(*2)] <*> [1,2,3]    -- [3,5,7]
+[(+1)] <*> ([(*2)] <*> [1,2,3])               -- [3,5,7]
+
+pure (.) <*> Just (+1) <*> Just (*2) <*> Just 1     -- Just 3
+Just (+1) <*> (Just (*2) <*> Just 1)                -- Just 3
+-}
+
+
+-- cont. p. 1108
