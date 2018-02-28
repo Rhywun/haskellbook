@@ -4,10 +4,10 @@ import Data.Functor.Identity
 
 type Id = Identity
 
-xs4  = [1, 2 ,3]
-xs4' = [9, 9, 9]
+xs  = [1, 2 ,3]
+xs' = [9, 9, 9]
 
-i4 = const <$> xs4 <*> xs4'             -- [1,1,1,2,2,2,3,3,3]
+r = const <$> xs <*> xs'                -- [1,1,1,2,2,2,3,3,3]
 
 mkId = Identity
-j4 = const <$> mkId xs4 <*> mkId xs4'   -- [1,2,3]
+r' = const <$> mkId xs <*> mkId xs'   -- [1,2,3]

@@ -138,6 +138,18 @@ instance Applicative Identity where
   (<*>) (Identity f) (Identity a) = Identity (f a)
 
 -- Constant
+-- see constant.hs
+
+-- Exercise: Constant Instance
+
+newtype Constant a b = Constant { getConstant :: a } deriving (Eq, Ord, Show)
+
+instance Functor (Constant a) where
+  fmap f (Constant b) = Constant b
+
+instance Monoid a => Applicative (Constant a) where
+  pure _ = Constant { getConstant = mempty }
+  (<*>) (Constant x) (Constant y) = Constant (mappend x y)
 
 
--- cont. p. 1081
+-- cont. p. 1083
