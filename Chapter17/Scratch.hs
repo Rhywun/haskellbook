@@ -8,7 +8,8 @@ import Data.List (elemIndex)
 
 {-
 class Functor f => Applicative f where
-  pure :: a -> f a
+  pure :: a -> f a                                      -- pure 2 :: Maybe Int
+                                                        -- -> Just 2
   (<*>) :: f (a -> b) -> f a -> f b
 -}
 
@@ -85,28 +86,58 @@ added = (+ 3) <$> lookup 3 (zip [1, 2, 3] [4, 5, 6])
 
 -- 2
 
-y :: Maybe Integer
-y = lookup 3 $ zip [1, 2, 3] [4, 5, 6]
+y2 :: Maybe Integer
+y2 = lookup 3 $ zip [1, 2, 3] [4, 5, 6]
 
-z :: Maybe Integer
-z = lookup 2 $ zip [1, 2, 3] [4, 5, 6]
+z2 :: Maybe Integer
+z2 = lookup 2 $ zip [1, 2, 3] [4, 5, 6]
 
 tupled :: Maybe (Integer, Integer)
-tupled = (,) <$> y <*> z
+tupled = (,) <$> y2 <*> z2
 
 -- 3
 
-x :: Maybe Int
-x = elemIndex 3 [1, 2, 3, 4, 5]
+x3 :: Maybe Int
+x3 = elemIndex 3 [1, 2, 3, 4, 5] -- Just 2
 
-y :: Maybe Int
-y = elemIndex 4 [1, 2, 3, 4, 5]
+y3 :: Maybe Int
+y3 = elemIndex 4 [1, 2, 3, 4, 5] -- Just 3
 
-max' :: Int -> Int -> Int
+max' :: Int -> Int -> Int        -- Why is this here?
 max' = max
 
 maxed :: Maybe Int
-maxed = max' x y
+maxed = max' <$> x3 <*> y3       -- Just 3
+
+-- 4
+
+xs = [1, 2, 3]
+ys = [4, 5, 6]
+
+x4 :: Maybe Integer
+x4 = lookup 3 $ zip xs ys -- Just 6
+
+y4 :: Maybe Integer
+y4 = lookup 2 $ zip xs ys -- Just 5
+
+summed :: Maybe Integer
+summed = fmap sum $ (,) <$> x4 <*> y4
+
+-- Identity
+-- see identity.hs
+
+-- Exercise: Identity Instance
+
+newtype Identity a = Identity a deriving (Eq, Ord, Show)
+
+instance Functor Identity where
+  fmap f (Identity a) = Identity (f a)
+
+instance Applicative Identity where
+  pure = Identity
+  (<*>) (Identity f) (Identity a) = Identity (f a)
+
+-- Constant
 
 
--- cont. p. 1077
+-- cont. p. 1081
