@@ -6,21 +6,28 @@ import Test.QuickCheck
 import Test.QuickCheck.Checkers
 import Test.QuickCheck.Classes
 
--- this isn't going to work properly
 instance Monoid a => Monoid (ZipList a) where
-  mempty = ZipList []
+  mempty = pure mempty
   mappend = liftA2 mappend
 
--- instance Arbitrary a => Arbitrary (ZipList a) where
---   arbitrary = ZipList <$> arbitrary
+{-
+instance Arbitrary a => Arbitrary (ZipList a) where
+  arbitrary = ZipList <$> arbitrary
 
--- instance Arbitrary a => Arbitrary (Sum a) where
---   arbitrary = Sum <$> arbitrary
+instance Arbitrary a => Arbitrary (Sum a) where
+  arbitrary = Sum <$> arbitrary
+-}
 
 instance Eq a => EqProp (ZipList a) where
   (=-=) = eq
 
+-- List Applicative Exercise
 
--- LOST
+data List a = Nil | Cons a (List a) deriving (Eq, Show)
 
--- cont. p. 1120
+instance Functor List where
+  fmap = undefined
+  
+instance Applicative List where
+  pure = undefined
+  (<*>) = undefined

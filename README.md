@@ -26,3 +26,9 @@ _Chapter 16_
     * Write Functor Instances #9
     * Write Functor Instances #10
     * Write Functor Instances #11
+
+_Chapter 17_
+* ZipList Monoid
+* Chapter Exercises
+    * Specialize #4
+    

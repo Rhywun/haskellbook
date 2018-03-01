@@ -27,7 +27,11 @@ b3 = pure (+1) <*> [1,2,3]     -- [2, 3, 4]
 -}
 
 a4 = [(*2), (*3)] <*> [4, 5]   -- [8, 10, 12, 15], `f` is []
+
 b4 = Just (*2) <*> Just 2      -- Just 4, `f` is Maybe
+-- compare:
+--   fmap (*2) (Just 2)        -- Just 4
+
 c4 = Just (*2) <*> Nothing     -- Nothing
 
 -- Show me the monoids
