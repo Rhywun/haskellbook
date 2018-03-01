@@ -180,5 +180,27 @@ pure (.) <*> Just (+1) <*> Just (*2) <*> Just 1     -- Just 3
 Just (+1) <*> (Just (*2) <*> Just 1)                -- Just 3
 -}
 
+{-
+-- Homomorphism
+pure f <*> pure x = pure (f x)
 
--- cont. p. 1108
+pure (+1) <*> pure 2 :: Maybe Int   -- Just 3
+pure ((+1) 2) :: Maybe Int          -- Just 3
+-}
+
+{-
+-- Interchange
+u <*> pure y = pure ($ y) <*> u
+
+Just (+2) <*> pure 3            -- Just 5
+pure ($ 2) <*> Just (+3)        -- Just 5
+
+[(+1), (*2)] <*> pure 1         -- [2,2]
+pure ($ 1) <*> [(+1), (*2)]     -- [2,2]
+
+Just (+3) <*> pure 1            -- Just 4
+pure ($ 1) <*> Just (+3)        -- Just 4
+-}
+
+-- 17.8 - ZipList Monoid
+-- see Apl1.hs
