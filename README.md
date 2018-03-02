@@ -1,6 +1,8 @@
 # haskellbook
 Coding along with "Haskell Programming From First Principles"
 
+*N.B.* The folder 'hello' from Chapter 13 refuses to sync. ???
+
 Note to self - I have skipped the following exercises during this run-through. Maybe go back and try them later!
 
 _Chapter 11_
@@ -31,4 +33,3 @@ _Chapter 17_
 * ZipList Monoid
 * Chapter Exercises
     * Specialize #4
-    
