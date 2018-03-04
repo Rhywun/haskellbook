@@ -2,6 +2,9 @@ module Chapter18.Scratch where
 
 import Control.Applicative
 import Control.Monad
+import Test.QuickCheck
+import Test.QuickCheck.Checkers
+import Test.QuickCheck.Classes
 
 -- "Monads are applicative functors." Oh, boy.
 
@@ -192,5 +195,50 @@ instance Applicative (Sum a) where
   Second f <*> Second y = Second (f y)
 
 instance Monad (Sum a) where
-  return = pure
-  (>>=) = undefined                     -- COMPLETELY LOST HERE KTHXBAI
+  return         = pure
+  First x >>= _  = First x
+  Second y >>= f = f y
+
+-- 18.5 - Monad laws
+
+-- Identity
+{-
+m >>= return      = m
+return x >>= f    = f x
+-}
+
+-- Associativity
+{-
+(m >>= f) >>= g   = m >>= (\x -> f x >>= g)
+-}
+
+-- Test
+{-
+quickBatch (monad [(1, 2, 3])
+-}
+
+-- 18.6 - Application and composition
+
+mcomp :: Monad m => (b -> m c) -> (a -> m b) -> a -> m c
+mcomp f g a = join (f <$> g a)
+
+-- Same as:
+
+mcomp' :: Monad m => (b -> m c) -> (a -> m b) -> a -> m c
+mcomp' f g a = g a >>= f
+
+-- Kleisli composition
+
+sayHi :: String -> IO String
+sayHi greeting = do
+  putStrLn greeting
+  getLine
+
+readM :: Read a => String -> IO a
+readM = return . read
+
+getAge :: String -> IO Int
+getAge = sayHi >=> readM                            -- Oh, my.
+
+askForAge :: IO Int
+askForAge = getAge "Hello! How old are you? "

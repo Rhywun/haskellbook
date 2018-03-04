@@ -33,3 +33,9 @@ _Chapter 17_
 * ZipList Monoid
 * Chapter Exercises
     * Specialize #4
+
+_Chapter 18_
+* Chapter Exercises
+    * Write instances #4
+    * Write functions #5
+    * Write functions #6
