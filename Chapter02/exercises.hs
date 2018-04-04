@@ -1,4 +1,4 @@
-module Chapter02.Exercises where
+module Exercises where
 
 --
 -- 2.5

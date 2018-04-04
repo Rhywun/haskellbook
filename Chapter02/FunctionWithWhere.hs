@@ -1,4 +1,4 @@
-module Chapter02.FunctionWithWhere where
+module FunctionWithWhere where
 
 printInc n = print plusTwo
   where
