@@ -1,7 +1,5 @@
 module Scratch where
 
--- cont. p. 155
-
 --
 -- Comparing values
 --
@@ -21,12 +19,15 @@ fst' (a, b) = a
 snd' :: (a, b) -> b
 snd' (a, b) = b
 
+-- tupFunc (2, "two") (3, "three") == (5,"twothree")
 tupFunc :: (Int, [a]) -> (Int, [a]) -> (Int, [a])
 tupFunc (a, b) (c, d) = (a + c, b ++ d)
 
 -- call it: tupFunc (2, "two") (3, "three")
 --
+--
 -- Lists
+--
 p = "Papuchon"
 
 awesome = [p, "curry", ":)"]
