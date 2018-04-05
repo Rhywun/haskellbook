@@ -1,14 +1,13 @@
--- print3broken.hs
 module Print3Broken where
 
+-- Uncomment this line to fix
 greeting = "Yarrrrr"
 
 printSecond :: IO ()
-printSecond = do
-    putStrLn greeting
+printSecond = putStrLn greeting
 
 main :: IO ()
 main = do
     putStrLn greeting
     printSecond
-    -- where greeting = "Yarrrrr"
+    where greeting = "Yarrrrr"
