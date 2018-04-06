@@ -107,29 +107,34 @@ myAbs n =
 f :: (a, b) -> (c, d) -> ((b, d), (a, c))
 f x y = ((snd x, snd y), (fst x, fst y))
 
--- cont. p. 170
-
-
 --
 -- Correcting syntax
 -- 1
 x = (+)
 
+-- f1 "hello" == 6
 f1 xs = w `x` 1
   where
     w = length xs
 
 -- 2
+-- f2 'a' == 'a'
 f2 = \x -> x
 
 -- 3
+-- f3 (1, 2) == 1
 f3 (a, b) = a--
+--
 -- Match the function names to their types
+--
 -- 1
--- c
+-- show :: Show a => a -> String
+--
 -- 2
--- b
+-- (==) :: Eq a => a -> a -> Bool
+--
 -- 3
--- a
+-- fst :: (a, b) -> a
+--
 -- 4
--- d
+-- (+) :: Num a => a -> a -> a
