@@ -2,50 +2,63 @@
 
 module DetermineTheType where
 
+-- Without the NoMonomorphismRestriction language extension, this
+-- defaults to :: Integer instead of :: Num p => p
 example = 1
 
-e1a = (* 9) 6
--- 54 :: Num a => a
+-- 1
+--
+-- a
+e1a = (* 9) 6 -- 54 :: Num a => a
 
-e1b = head [(0,"doge"),(1,"kitteh")]
--- (0,"doge") :: Num a => (a, [Char])
+-- b
+e1b = head [(0, "doge"), (1, "kitteh")] -- (0,"doge") :: Num a => (a, [Char])
 
-e1c = head [(0 :: Integer ,"doge"),(1,"kitteh")]
--- (0,"doge") :: (Integer, [Char])
+-- c
+e1c = head [(0 :: Integer, "doge"), (1, "kitteh")] -- (0,"doge") :: (Integer, [Char])
 
-e1d = if False then True else False
--- False :: Bool
+-- d
+e1d =
+  if False
+    then True
+    else False -- False :: Bool
 
-e1e = length [1, 2, 3, 4, 5]
--- 5 :: Int
+-- e
+e1e = length [1, 2, 3, 4, 5] -- 5 :: Int
 
-e1f = (length [1, 2, 3, 4]) > (length "TACOCAT")
--- False :: Bool
+-- f
+e1f = length [1, 2, 3, 4] > length "TACOCAT" -- False :: Bool
 
-{-
-x = 5
-y = x + 5
-w = y * 10
--- w :: Num a => a
--}
+-- 2
+--
+x2 = 5
 
-{-
-x = 5
-y = x + 5
-z y = y * 10
--- z :: Num a => a -> a
--}
+y2 = x2 + 5
 
-{-
-x = 5
-y = x + 5
-f = 4 / y
--- f :: Fractional a => a
--}
+w2 = y2 * 10 -- w2 :: Num a => a
 
-x = "Julie"
-y = " <3 "
-z = "Haskell"
-f = x ++ y ++ z
--- f :: [a] -- wrong
--- f :: [Char] because the use of strings narrows the type down from `a`
+-- 3
+--
+x3 = 5
+
+y3 = x3 + 5
+
+z3 y3 = y3 * 10 -- z3 :: Num a => a -> a
+
+-- 4
+--
+x4 = 5
+
+y4 = x4 + 5
+
+f4 = 4 / y4 -- f4 :: Fractional a => a
+
+-- 5
+--
+x5 = "Julie"
+
+y5 = " <3 "
+
+z5 = "Haskell"
+
+f5 = x5 ++ y5 ++ z5 -- f5 :: [Char]
