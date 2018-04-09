@@ -1,4 +1,4 @@
-module Chapter05.TypeKwonDo where
+module TypeKwonDo where
 
 -- 0
 --
