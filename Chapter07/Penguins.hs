@@ -1,4 +1,4 @@
-module Chapter07.Penguins where
+module Penguins where
 
 data WherePenguinsLive = Galapagos
                        | Antarctica

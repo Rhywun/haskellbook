@@ -1,4 +1,4 @@
-module Chapter07.Arith2 where
+module Arith2 where
 
 add :: Int -> Int -> Int
 add x y = x + y

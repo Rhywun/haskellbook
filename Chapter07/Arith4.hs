@@ -1,4 +1,4 @@
-module Chapter07.Arith4 where
+module Arith4 where
 
 roundTrip :: (Show a, Read a) => a -> a
 roundTrip a = read (show a)

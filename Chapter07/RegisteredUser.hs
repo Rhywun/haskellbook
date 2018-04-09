@@ -1,4 +1,4 @@
-module Chapter07.RegisteredUser where
+module RegisteredUser where
 
 newtype Username = Username String
 newtype AccountNumber = AccountNumber Integer
