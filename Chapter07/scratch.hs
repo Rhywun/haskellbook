@@ -6,24 +6,46 @@ module Scratch where
 myNum :: Num a => a
 myNum = 1
 
-myVal f = myNum + f
+myVal :: Num a => a -> a
+myVal f = f + myNum
 
-stillAFunction :: [a] -> [a] -> [a] -> [a]
-stillAFunction a b c = a ++ b ++ c
+-- Shadowing:
+-- bindExp 9001 == "x=10 and y=5"
+bindExp :: Integer -> String
+bindExp x -- <-- warning: [-Wunused-matches]
+ =
+  let x = 10
+      y = 5
+  in mconcat ["x=", show x, " and y=", show y]
 
+--
+-- 7.3 - Anonymous functions
+--
+{-
+triple x =  x * 3     becomes:
+      \x -> x * 3
+-}
+--
 --
 -- 7.4 - Pattern matching
 --
 isItTwo :: Integer -> Bool
--- isItTwo _ = False            -- warning: overlap
+-- isItTwo _ = False -- --> warning: [-Woverlapping-patterns]
 isItTwo 2 = True
-isItTwo _ = False -- if left out: "bottom" at runtime, or use :set -Wall for
-                                -- compiler warning
+isItTwo _ = False
+  -- if left out: "bottom" at runtime, or use :set -Wall or -Wincomplete-patterns
+  -- to get a compiler warning
 
+--
 -- see RegisteredUser.hs
+--
 -- see Penguins.hs
+--
 -- see MatchingTuples.hs
+--
+--
 -- 7.5 - Case expressions
+--
 -- rewriting this
 -- if x + 1 == 1 then "AWESOME" else "wut"
 funcZ x =
@@ -43,7 +65,9 @@ pal' xs =
   where
     y = xs == reverse xs
 
+--
 -- 7.6 - Higher-order functions
+--
 flip' :: (a -> b -> c) -> b -> a -> c
 flip' f x y = f y x
 
