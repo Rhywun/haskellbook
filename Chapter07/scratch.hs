@@ -149,23 +149,34 @@ avgGrade x
 --
 -- 7.8 - Function composition
 --
+fc1 :: Integer
 fc1 = negate . sum $ [1, 2, 3, 4, 5]
+  --  ^^^^^^   ^^^   ^^^^^^^^^^^^^^^
+  --     f   (  g           x       )
+  --      or (negate . sum) [1, 2, 3, 4, 5]
+  -- same as negate (sum [1, 2, 3, 4, 5])
 
+fc2 :: [Integer]
 fc2 = take 5 . reverse $ [1 .. 10]
+  --  ^^^^^^   ^^^^^^^   ^^^^^^^^^
+  --     f   (    g          x    )         Note that the `f` is a partially-applied `take`
+  --      or (take 5 . reverse) [1..10]
+  -- same as take 5 (reverse [1..10])
 
 fc3 = take 5 . filter odd . enumFrom $ 3
 
 --
 -- 7.9 - Pointfree style
 --
--- For some reason I don't understand, the first two require a type definition in the REPL
+-- For some reason I don't understand, the first two require a type definition in a code file
+--
 pf1 :: Num a => [a] -> a
 pf1 = negate . sum
 
 pf2 :: Num a => a -> [a] -> a
 pf2 = foldr (+)
 
-pf3 :: [Char] -> Int
+-- pf3 :: [Char] -> Int
 pf3 = length . filter (== 'a')
 
 -- 7.10 - Demonstrating compostion
