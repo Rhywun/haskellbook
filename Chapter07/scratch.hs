@@ -32,8 +32,7 @@ triple x =  x * 3     becomes:
 isItTwo :: Integer -> Bool
 -- isItTwo _ = False -- --> warning: [-Woverlapping-patterns]
 isItTwo 2 = True
-isItTwo _ = False
-  -- if left out: "bottom" at runtime, or use :set -Wall or -Wincomplete-patterns
+isItTwo _ = False -- if left out: "bottom" at runtime, or use :set -Wall or -Wincomplete-patterns
   -- to get a compiler warning
 
 --
@@ -66,10 +65,18 @@ pal' xs =
     y = xs == reverse xs
 
 --
+-- See GreetIfCool3.hs
+--
+--
 -- 7.6 - Higher-order functions
 --
+-- (flip' (-)) 10 1 == -9
 flip' :: (a -> b -> c) -> b -> a -> c
 flip' f x y = f y x
+
+flip'' :: (a -> b -> c) -> b -> a -> c
+flip'' f = \x y -> f y x
+    -- Why would I want to do this?
 
 --
 data Employee
@@ -82,13 +89,14 @@ data Employee
 reportBoss :: Employee -> Employee -> IO ()
 reportBoss e e' = putStrLn $ show e ++ " is the boss of " ++ show e'
 
+-- employeeRank codersRuleCEOsDrool Coder Manager
 employeeRank ::
      (Employee -> Employee -> Ordering) -> Employee -> Employee -> IO ()
 employeeRank f e e' =
   case f e e' of
     GT -> reportBoss e e'
     EQ -> putStrLn "Neither employee is the boss"
-    LT -> (flip reportBoss) e e'
+    LT -> reportBoss e' e
 
 codersRuleCEOsDrool :: Employee -> Employee -> Ordering
 codersRuleCEOsDrool Coder Coder = EQ
@@ -96,15 +104,16 @@ codersRuleCEOsDrool Coder _     = GT
 codersRuleCEOsDrool _ Coder     = LT
 codersRuleCEOsDrool e e'        = compare e e'
 
--- e.g.
--- employeeRank codersRuleCEOsDrool Coder Manager
+--
 -- 7.7 - Guards
+--
 -- Rewrite this:
 -- myAbs :: Integer -> Integer
 -- myAbs x = if x < 0 then (-x) else x
+--
 myAbs :: Integer -> Integer
 myAbs x
-  | x < 0 = (-x)
+  | x < 0 = -x
   | otherwise = x
 
 --
@@ -114,13 +123,13 @@ bloodNa x
   | x > 145 = "too high"
   | otherwise = "just right"
 
-isRight :: (Num a, Eq a) => a -> a -> a -> String
-isRight a b c
+isRightTriangle :: (Num a, Eq a) => a -> a -> a -> String
+isRightTriangle a b c
   | a ^ 2 + b ^ 2 == c ^ 2 = "RIGHT ON"
   | otherwise = "not right"
 
-dogYrs :: Integer -> Integer
-dogYrs x
+dogYears :: Integer -> Integer
+dogYears x
   | x <= 0 = 0
   | x <= 1 = x * 15
   | x <= 2 = x * 12
@@ -137,14 +146,18 @@ avgGrade x
   where
     y = x / 100
 
+--
 -- 7.8 - Function composition
+--
 fc1 = negate . sum $ [1, 2, 3, 4, 5]
 
 fc2 = take 5 . reverse $ [1 .. 10]
 
 fc3 = take 5 . filter odd . enumFrom $ 3
 
+--
 -- 7.9 - Pointfree style
+--
 -- For some reason I don't understand, the first two require a type definition in the REPL
 pf1 :: Num a => [a] -> a
 pf1 = negate . sum
