@@ -1,65 +1,8 @@
-module Chapter09.Exercises where
+module Exercises where
 
 import Data.Bool
 import Data.Char
 
--- 9.5 - EnumFromTo
-
-eftBool :: Bool -> Bool -> [Bool]
-eftBool from to | from > to  = []
-                | from == to = [from]
-                | otherwise  = from : eftBool (succ from) to
-
-eftOrd :: Ordering -> Ordering -> [Ordering]
-eftOrd from to | from > to  = []
-               | from == to = [from]
-               | otherwise  = from : eftOrd (succ from) to
-
-eftInt :: Int -> Int -> [Int]
-eftInt from to | from > to  = []
-               | from == to = [from]
-               | otherwise  = from : eftInt (succ from) to
-
-eftChar :: Char -> Char -> [Char]
-eftChar from to | from > to  = []
-                | from == to = [from]
-                | otherwise  = from : eftChar (succ from) to
-
--- 9.6 - Thy Fearful Symmetry
-
--- 1
-
-{-
-myWords "sheryl wants fun" = ["sheryl", "wants", "fun"]
--}
-myWords :: String -> [String]
-myWords ""      = []
-myWords (' ':s) = myWords s
-myWords s       = w : myWords t
-    where w = takeWhile (/=' ') s
-          t = dropWhile (/=' ') s
-
--- Boy, did I have to cheat on this one. Shit. This seems absurdly difficult for a mid-chepter exercise.
-
--- 2
--- See PoemLines.hs
-
--- 3
--- See BreakOn.hs
-
--- 9.7 - Comprehend Thy Lists
-
-mySqr = [x^2 | x <- [1..10]]
-
-ctl1 = [x | x <- mySqr, rem x 2 == 0]
--- even squares
-
-ctl2 = [(x, y) | x <- mySqr, y <- mySqr, x < 50, y > 50]
--- [(1,64),(1,81),(1,100),(4,64),(4,81),(4,100),(9,64),(9,81),(9,100),(16,64),(16,81),(16,100),
--- (25,64),(25,81),(25,100),(36,64),(36,81),(36,100),(49,64),(49,81),(49,100)]
-
-ctl3 = take 5 [(x, y) | x <- mySqr, y <- mySqr, x < 50, y > 50]
--- [(1,64),(1,81),(1,100),(4,64),(4,81)]
 
 -- 9.7 - Square Cube
 

@@ -1,4 +1,4 @@
-module Chapter09.BreakOn where
+module BreakOn where
 
 {-
 -- Generalize these:
@@ -34,3 +34,9 @@ s22 = "In the forests of the night\n"
 s23 = "What immortal hand or eye\n"
 s24 = "Could frame thy fearful symmetry?"
 s2 = s21 ++ s22 ++ s23 ++ s24
+
+-- myWords s1 == ["sheryl","wants","fun"]
+myWords = breakOn ' '
+
+-- myLines s2 == ["Tyger Tyger, burning bright","In the forests of the night", ...]
+myLines = breakOn '\n'
