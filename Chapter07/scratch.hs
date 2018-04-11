@@ -176,10 +176,13 @@ pf1 = negate . sum
 pf2 :: Num a => a -> [a] -> a
 pf2 = foldr (+)
 
+-- pf3 "abracadabra" == 5
 -- pf3 :: [Char] -> Int
 pf3 = length . filter (== 'a')
 
+--
 -- 7.10 - Demonstrating compostion
+--
 print' a = putStrLn (show a)
 
 print'' a = (putStrLn . show) a
@@ -187,7 +190,9 @@ print'' a = (putStrLn . show) a
 print''' :: Show a => a -> IO () -- again, this is required
 print''' = putStrLn . show
 
+--
 -- 7.12 - Chapter Definitions
+--
 data Blah =
   Blah
 
@@ -250,3 +255,11 @@ definitelyDontDoThis True  = 1
 definitelyDontDoThis False = error "oops"
 -- don't use error.
 -- We'll show you a better way soon.
+--
+-- Pointfree
+--
+addAndDrop x y = x + 1
+addAndDrop' = const . (1 +)
+
+reverseTuple (a, b) = (b, a)
+reverseTuple' = uncurry (flip (,))

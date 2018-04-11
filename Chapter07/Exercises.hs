@@ -154,7 +154,9 @@ numbers x
 -- 5 -> a
 --
 -- Let's write code
+--
 -- 1
+--
 tensDigit :: Integral a => a -> a
 tensDigit x = mod (fst (divMod x 10)) 10
 
@@ -162,8 +164,13 @@ hunsDigit :: Integral a => a -> a
 hunsDigit x = mod (fst (divMod x 100)) 10
 
 -- 2
-foldBool :: a -> a -> Bool -> a
-foldBool x y b =
+--
+foldBool3 :: a -> a -> Bool -> a
+foldBool3 x _ False = x
+foldBool3 _ y True  = y
+
+foldBool1 :: a -> a -> Bool -> a
+foldBool1 x y b =
   case b of
     True  -> y
     False -> x
@@ -173,12 +180,9 @@ foldBool2 x y b
   | b == False = x
   | otherwise = y
 
-foldBool3 :: a -> a -> Bool -> a
-foldBool3 x _ False = x
-foldBool3 _ y True  = y
-
 -- 3
 g :: (a -> b) -> (a, c) -> (b, c)
 g f (x, z) = (f x, z)
+--
 -- 4, 5, 6
 -- See Arith4.hs
