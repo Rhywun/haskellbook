@@ -2,10 +2,22 @@ module Cipher where
 
 import           Data.Char
 
+-- This version makes the input uppercase and filters out non-A to Z
+{-
+caesar 3 "hello, world!" == "KHOORZRUOG"
+-}
 caesar :: Int -> String -> String
-caesar n = map (\ x -> chr $ mod (ord x + n - a) 26 + a)
+caesar shift input =
+  map
+    (\letter -> chr $ mod (ord letter + shift - letterA) 26 + letterA)
+    cleanedInput
   where
-    a = ord 'a'
+    letterA = ord 'A'
+    cleanedInput = lettersOnly . map toUpper $ input
+    lettersOnly = filter $ \letter -> letter `elem` ['A' .. 'Z']
 
+{-
+(uncaesar 3 $ caesar 3 "hello, world!") == "HELLOWORLD"
+-}
 uncaesar :: Int -> String -> String
-uncaesar n = caesar (-n)
+uncaesar shift = caesar (-shift)

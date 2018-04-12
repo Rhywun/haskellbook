@@ -1,30 +1,6 @@
-module Chapter10.Exercises where
+module Exercises where
 
 import Data.Time
-
--- 10.5 - Understanding Folds
-
-uf1  = foldr (*) 1 [1..5]           -- 120
--- uf1a = flip (*) 1 [1..5]         -- Syntax error
-uf1b = foldl (flip (*)) 1 [1..5]    -- 120
-uf1c = foldl (*) 1 [1..5]           -- 120
-
-uf2 = foldl (flip (*)) 1 [1..3]
--- (3 * (2 * 1))
-
--- 3: c
-
--- 4: a
-
-uf5a = foldr (++) "" ["woot", "WOOT", "woot"]
-uf5b = foldr max ' ' "fear is the little death"
-uf5c = foldr (&&) True [False, True]
-uf5d = foldr (||) False [False, True]
-uf5e = foldr ((++) . show) "" [1..5]
-uf5f = foldr const 'a' ['1'..'5']
-uf5g = foldr const '0' "tacos"
-uf5h = foldl (flip const) '0' "burritos"
-uf5i = foldl (flip const) 'z' ['1'..'5']
 
 -- 10.6 - Database Processing
 

@@ -42,6 +42,7 @@ getCapital'' = toUpper . head
 -- Ciphers
 -- see Cipher.hs
 --
+--
 -- Writing your own standard functions
 --
 and' :: [Bool] -> Bool
@@ -81,7 +82,7 @@ squish []     = []
 squish (x:xs) = x ++ squish xs
 
 {-
-squishMap (\x -> "WO "++[x]++" HOO ") "123" == "WO 1 HOO WO 2 HOO WO 3 HOO "
+squishMap (\x -> "WO " ++ [x] ++ " HOO ") "123" == "WO 1 HOO WO 2 HOO WO 3 HOO "
 -}
 squishMap :: (a -> [b]) -> [a] -> [b]
 squishMap _ []     = []
@@ -103,8 +104,6 @@ maximumBy' f (x:xs) =
   where
     y = maximumBy' f xs
 
--- I cheated on this one; too hard!
--- How do you even begin to come up with this logic...?!
 minimumBy' :: (a -> a -> Ordering) -> [a] -> a
 minimumBy' _ [x] = x
 minimumBy' f (x:xs) =
