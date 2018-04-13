@@ -1,5 +1,7 @@
 module Scratch where
 
+import           Data.Time
+
 --
 -- Fold right
 --
@@ -50,7 +52,6 @@ e03 = foldr (^) 2 [1 .. 3]
 -}
 e04 = foldl (^) 2 [1 .. 3]
 
---
 -- Exercises: Understanding Folds
 --
 uf1 = foldr (*) 1 [1 .. 5] -- 120
@@ -89,6 +90,56 @@ uf5i = foldl (flip const) 'z' ['1' .. '5']
 --
 hwff1 = foldr (\a b -> take 3 a ++ b) "" ["Pizza", "Apple", "Banana"]
 
+-- Exercises: Database Processing
+--
+data DatabaseItem
+  = DbString String
+  | DbNumber Integer
+  | DbDate UTCTime
+  deriving (Eq, Ord, Show)
+
+theDatabase :: [DatabaseItem]
+theDatabase =
+  [ DbDate (UTCTime (fromGregorian 1911 5 1) (secondsToDiffTime 34123))
+  , DbNumber 9001
+  , DbString "Hello, world!"
+  , DbDate (UTCTime (fromGregorian 1921 5 1) (secondsToDiffTime 34123))
+  ]
+
+-- Again with the cheating. I'm guessing the author wants us to use folds here
+-- but I don't see how foldr or foldl applies for these.
+{-
+filterDbDate theDatabase == [1911-05-01 09:28:43 UTC,1921-05-01 09:28:43 UTC
+-}
+filterDbDate :: [DatabaseItem] -> [UTCTime]
+filterDbDate db = [date | (DbDate date) <- db]
+
+{-
+filterDbNumber theDatabase == [9001]
+-}
+filterDbNumber :: [DatabaseItem] -> [Integer]
+filterDbNumber db = [number | (DbNumber number) <- db]
+
+{-
+mostRecent theDatabase == 1921-05-01 09:28:43 UTC
+-}
+mostRecent :: [DatabaseItem] -> UTCTime
+mostRecent = maximum . filterDbDate
+
+{-
+sumDb theDatabase == 9001
+-}
+sumDb :: [DatabaseItem] -> Integer
+sumDb = sum . filterDbNumber
+
+{-
+avgDb theDatabase == 9001.0
+-}
+avgDb :: [DatabaseItem] -> Double
+avgDb db = fromIntegral (sum aFilter) / fromIntegral (length aFilter)
+  where
+    aFilter = filterDbNumber db
+
 --
 -- 10.9 - Scans
 --
@@ -97,3 +148,13 @@ fibs = 1 : scanl (+) 1 fibs
 
 fib :: Int -> Integer
 fib = (!!) fibs
+
+-- Scans Exercises
+--
+fibs' :: [Integer]
+fibs' = take 20 $ 1 : scanl (+) 1 fibs
+
+fibs'' :: [Integer]
+fibs'' = filter (< 100) (1 : scanl (+) 1 fibs)
+
+factorials = take 5 $ scanl (*) 1 [2 ..]
