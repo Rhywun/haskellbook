@@ -1,6 +1,6 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
-module Chapter11.Generalize where
+module Generalize where
 
 class TooMany a
     where tooMany :: a -> Bool

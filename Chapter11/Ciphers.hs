@@ -1,4 +1,4 @@
-module Chapter11.Ciphers where
+module Ciphers where
 
 import Data.Char
 import System.IO

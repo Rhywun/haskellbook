@@ -1,4 +1,4 @@
-module Chapter11.Exercises where
+module Exercises where
 
 import Data.Char
 
