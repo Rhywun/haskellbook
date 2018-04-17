@@ -1,7 +1,12 @@
 # haskellbook
 Coding along with "Haskell Programming From First Principles"
 
-*N.B.* The folder 'hello' from Chapter 13 refuses to sync. ???
+*N.B.*
+* The folder 'hello' from Chapter 13 refuses to sync. ???
+* Beginning with Chapter 8, I decided it would be easier to integrate the miscellaneous
+  exercises that appear throughout each chapter into that chapter's Scratch.hs file and have
+  the Exercises.hs file contain only the Chapter Exercises that appear at the end of the
+  chapter.
 
 Note to self - I have skipped the following exercises during this run-through. Maybe go back and try them later!
 
