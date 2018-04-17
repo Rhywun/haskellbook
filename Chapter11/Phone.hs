@@ -69,14 +69,27 @@ reverseTaps phone 'A' == [('*', 1), ('2', 1)]   -- i.e. tap * then 2
 -}
 reverseTaps :: Phone -> Char -> [(Digit, Presses)]
 reverseTaps phone char
-  | isAsciiLower char = [(digit', presses)]
+  | isAsciiLower char || isDigit char = [(digit', presses)]
   | otherwise = ('*', 1) : [(digit', presses)]
   where
     button = head $ filter (containsCharacter char) (buttons phone)
     digit' = digit button
     presses = 1 + fromJust (elemIndex (toLower char) (string button))
 
+{-
+cellPhonesDead phone "Lol" == [('*',1),('5',3),('6',3),('5',3)]
+cellPhonesDead phone "123" == [('1',1),('2',4),('3',4)]
+-}
 cellPhonesDead :: Phone -> String -> [(Digit, Presses)]
 cellPhonesDead phone = concatMap (reverseTaps phone)
 
--- TODO: Handle numeral input!
+messages = map (cellPhonesDead phone) convo
+
+{-
+fingerTaps [('*',1),('5',3),('6',3),('5',3)] == 10
+fingerTaps [('1',1),('2',4),('3',4)] == 9
+-}
+fingerTaps :: [(Digit, Presses)] -> Presses
+fingerTaps [(_, presses)] = sum presses
+
+-- cont. p. 700
