@@ -6,11 +6,11 @@ Coding along with "Haskell Programming From First Principles"
 Note to self - I have skipped the following exercises during this run-through. Maybe go back and try them later!
 
 _Chapter 10_
-* Chapter Exercises - most of them
+* Chapter Exercises - everything after rewriting `and` and `or` with folds
 
 _Chapter 11_
-* isSubSeqOf
-* capitalizeParagraph
+* ~~isSubSeqOf~~
+* ~~capitalizeParagraph~~
 * Phone Exercise
 
 _Chapter 12_

@@ -113,20 +113,21 @@ s = "blah. woot ha."
 -- see Phone.hs
 --
 -- Hutton's Razor
+--
 data Expr
   = Lit Integer
   | Add Expr
         Expr
 
 {-
-eval (Add (Lit 1) (Lit 2)) = 3
+eval (Add (Lit 1) (Lit 2)) == 3
 -}
 eval :: Expr -> Integer
 eval (Lit n)   = n
 eval (Add x y) = eval x + eval y
 
 {-
-printExpr (Add (Lit 1) (Lit 2)) = "1 + 2"
+printExpr (Add (Lit 1) (Lit 2)) == "1 + 2"
 -}
 printExpr :: Expr -> String
 printExpr (Lit n)   = show n

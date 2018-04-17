@@ -85,11 +85,31 @@ cellPhonesDead phone = concatMap (reverseTaps phone)
 
 messages = map (cellPhonesDead phone) convo
 
+x |> f = f x -- found this on GitHub
+
 {-
 fingerTaps [('*',1),('5',3),('6',3),('5',3)] == 10
 fingerTaps [('1',1),('2',4),('3',4)] == 9
 -}
 fingerTaps :: [(Digit, Presses)] -> Presses
-fingerTaps [(_, presses)] = sum presses
+fingerTaps taps = map snd taps |> sum -- or: sum $ map snd taps
 
--- cont. p. 700
+allFingerTaps = map fingerTaps messages
+
+
+
+-- TODO: I don't understand the questions below - see pp. 700-1
+
+
+{-
+mostPopularLetter
+mostPopularLetter
+-}
+mostPopularLetter :: String -> Char
+mostPopularLetter = undefined
+
+coolestLtr :: [String] -> Char
+coolestLtr = undefined
+
+coolestWord :: [String] -> String
+coolestWord = undefined
