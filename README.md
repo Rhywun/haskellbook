@@ -16,7 +16,7 @@ _Chapter 10_
 _Chapter 11_
 * ~~isSubSeqOf~~
 * ~~capitalizeParagraph~~
-* Phone Exercise
+* Phone Exercise (partial)
 
 _Chapter 12_
 * countTheBeforeVowel

@@ -96,11 +96,7 @@ fingerTaps taps = map snd taps |> sum -- or: sum $ map snd taps
 
 allFingerTaps = map fingerTaps messages
 
-
-
 -- TODO: I don't understand the questions below - see pp. 700-1
-
-
 {-
 mostPopularLetter
 mostPopularLetter
