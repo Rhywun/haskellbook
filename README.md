@@ -20,7 +20,7 @@ _Chapter 11_
 
 _Chapter 12_
 * ~~countTheBeforeVowel~~
-* everything after "It's only Natural"
+* everything from "Small library for Maybe" forward
 
 _Chapter 15_
 * Semigroups #9

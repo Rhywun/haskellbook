@@ -1,7 +1,7 @@
 module Exercises where
 
 import           Data.List
-import           Data.Maybe (fromMaybe)
+import           Data.Maybe
 
 -- Determine the kinds
 --
@@ -112,19 +112,19 @@ integerToNat i
 -- Small library for Maybe
 --
 {-
-isJust (Just 1) == True
-isJust Nothing  == False
+isJust2 (Just 1) == True
+isJust2 Nothing  == False
 -}
-isJust :: Maybe a -> Bool
-isJust (Just _) = True
-isJust Nothing  = False
+isJust2 :: Maybe a -> Bool
+isJust2 (Just _) = True
+isJust2 Nothing  = False
 
 {-
-isNothing (Just 1) == False
-isNothing Nothing  == True
+isNothing2 (Just 1) == False
+isNothing2 Nothing  == True
 -}
-isNothing :: Maybe a -> Bool
-isNothing = not . isJust
+isNothing2 :: Maybe a -> Bool
+isNothing2 = not . isJust
 
 {-
 mayybee 0 (+1) Nothing  == 0
@@ -134,4 +134,89 @@ mayybee :: b -> (a -> b) -> Maybe a -> b
 mayybee x f Nothing  = x
 mayybee x f (Just y) = f y
 
--- cont. p. 739
+{-
+fromMaybe2 0 Nothing  == 0
+fromMaybe2 0 (Just 1) == 1
+-}
+fromMaybe2 :: a -> Maybe a -> a
+fromMaybe2 x Nothing  = x
+fromMaybe2 x (Just y) = y
+
+{-
+fromMaybe3 0 Nothing  == 0
+fromMaybe3 0 (Just 1) == 1
+-}
+fromMaybe3 :: a -> Maybe a -> a
+fromMaybe3 x = mayybee x id
+
+{-
+listToMaybe2 [1, 2, 3] == Just 1
+listToMaybe2 []        == Nothing
+ -}
+listToMaybe2 :: [a] -> Maybe a
+listToMaybe2 []     = Nothing
+listToMaybe2 (x:xs) = Just x
+
+{-
+maybeToList2 (Just 1) == [1]
+maybeToList2 Nothing  == []
+-}
+maybeToList2 :: Maybe a -> [a]
+maybeToList2 Nothing  = []
+maybeToList2 (Just x) = [x]
+
+{-
+catMaybes2 [Just 1, Nothing, Just 2]   == [1, 2]
+catMaybes2 [Nothing, Nothing, Nothing] == []
+-}
+catMaybes2 :: [Maybe a] -> [a]
+catMaybes2 xs = [fromJust x | x <- xs, isJust x] -- or [x | Just x <- xs] !!!
+
+{-
+flipMaybe [Just 1, Just 2, Just 3] == Just [1, 2, 3]
+flipMaybe [Just 1, Nothing, Just 3] == Nothing
+-}
+flipMaybe :: [Maybe a] -> Maybe [a]
+flipMaybe [] = Nothing
+flipMaybe xs
+  | any isNothing xs = Nothing
+  | otherwise = Just (catMaybes2 xs)
+    -- Cheated
+
+--
+-- Small library for Either
+--
+{-
+lefts2 [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] == ["foo","bar","baz"]
+-}
+lefts2 :: [Either a b] -> [a]
+lefts2 xs = [x | Left x <- xs]
+    -- TODO: Rewrite with foldr
+
+{-
+rights2 [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] == [3, 7]
+-}
+rights2 :: [Either a b] -> [b]
+rights2 xs = [x | Right x <- xs]
+    -- TODO: Rewrite with foldr
+
+{-
+partitionEithers2 [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] ==
+  (["foo","bar","baz"],[3,7])
+-}
+partitionEithers2 :: [Either a b] -> ([a], [b])
+partitionEithers2 xs = (lefts2 xs, rights2 xs)
+
+eitherMaybe :: (b -> c) -> Either a b -> Maybe c
+eitherMaybe _ (Left _)  = Nothing
+eitherMaybe f (Right y) = Just (f y)
+
+{-
+either2 length (*2) (Left "foo") == 3
+either2 length (*2) (Right 3)    == 6
+-}
+either2 :: (a -> c) -> (b -> c) -> Either a b -> c
+either2 f _ (Left x)  = f x
+either2 _ g (Right y) = g y
+
+-- cont. p. 741
