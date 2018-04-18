@@ -19,7 +19,8 @@ _Chapter 11_
 * Phone Exercise (partial)
 
 _Chapter 12_
-* countTheBeforeVowel
+* ~~countTheBeforeVowel~~
+* everything after "It's only Natural"
 
 _Chapter 15_
 * Semigroups #9
@@ -47,3 +48,6 @@ _Chapter 18_
     * Write instances #4
     * Write functions #5
     * Write functions #6
+
+
+https://github.com/andrewMacmurray/haskell-book-solutions/

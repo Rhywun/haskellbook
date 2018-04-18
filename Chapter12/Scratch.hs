@@ -22,12 +22,12 @@ type Age = Integer
 data Person =
   Person Name
          Age
-  deriving (Show)
+  deriving (Eq, Show)
 
 -- First attempt
 {-
-mkPerson1 "Jow Blow" 60 == Just (Person "Jow Blow" 60)
-mkPerson1 "" 160 == Nothing
+mkPerson1 "Joe Blow" 60 == Just (Person "Joe Blow" 60)
+mkPerson1 "" 160        == Nothing
 -}
 mkPerson1 :: Name -> Age -> Maybe Person
 mkPerson1 name age
@@ -42,27 +42,40 @@ data PersonInvalid
   | AgeTooLow
   deriving (Eq, Show)
 
+{-
+mkPerson2 "Joe Blow" 60 == Right (Person "Joe Blow" 60)
+mkPerson2 "" 160        == Left NameEmpty
+mkPerson2 "Joe" (-1)    == Left AgeTooLow
+mkPerson2 "" (-1)       == Left NameEmpty      <-- only one error
+-}
 mkPerson2 :: Name -> Age -> Either PersonInvalid Person
 mkPerson2 name age
   | name /= "" && age >= 0 = Right $ Person name age
   | name == "" = Left NameEmpty
   | otherwise = Left AgeTooLow
 
+-- Now with better validation
 --
 type ValidatePerson a = Either [PersonInvalid] a
 
 ageOkay :: Age -> Either [PersonInvalid] Age
 ageOkay age =
-  case age >= 0 of
-    True  -> Right age
-    False -> Left [AgeTooLow]
+  if age >= 0
+    then Right age
+    else Left [AgeTooLow]
 
 nameOkay :: Name -> Either [PersonInvalid] Name
 nameOkay name =
-  case name /= "" of
-    True  -> Right name
-    False -> Left [NameEmpty]
+  if name /= ""
+    then Right name
+    else Left [NameEmpty]
 
+{-
+mkPerson "Joe Blow" 60 == Right (Person "Joe Blow" 60)
+mkPerson "" 160        == Left [NameEmpty]
+mkPerson "Joe" (-1)    == Left [AgeTooLow]
+mkPerson "" (-1)       == Left [NameEmpty,AgeTooLow]    <-- both errors
+-}
 mkPerson :: Name -> Age -> ValidatePerson Person
 mkPerson name age = mkPerson' (nameOkay name) (ageOkay age)
 
@@ -71,6 +84,7 @@ mkPerson' (Right nameOk) (Right ageOk) = Right (Person nameOk ageOk)
 mkPerson' (Left badName) (Left badAge) = Left (badName ++ badAge)
 mkPerson' (Left badName) _             = Left badName
 mkPerson' _ (Left badAge)              = Left badAge
+    -- Later we'll simplify this with `liftA2`
 
 --
 -- 12.4 - Kinds, a thousand stars in your types
@@ -78,8 +92,11 @@ mkPerson' _ (Left badAge)              = Left badAge
 data Example a
   = Blah
   | RoofGoats
-  | Woot a-- :k Example :: * -> *
+  | Woot a --
+-- :k Example :: * -> *
 -- :k Maybe :: * -> *
 -- :k Maybe Int :: *
 -- :k Either :: * -> * -> *
 -- :k Either Int String :: *
+-- :k Maybe Example              <-- Bzzzt
+-- :k Maybe (Example Int) :: *
