@@ -1,7 +1,7 @@
-module Chapter13.Scratch where
+module Scratch where
 
 -- Intermission: Check your understanding
-
+--
 {-
 1. forever, when
 2. Data.Bit, Database.Blacktip.Types
