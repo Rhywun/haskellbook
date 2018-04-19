@@ -207,6 +207,10 @@ partitionEithers2 [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] ==
 partitionEithers2 :: [Either a b] -> ([a], [b])
 partitionEithers2 xs = (lefts2 xs, rights2 xs)
 
+{-
+eitherMaybe (*2) (Left "foo") == Nothing
+eitherMaybe (*2) (Right 3)    == Just 6
+-}
 eitherMaybe :: (b -> c) -> Either a b -> Maybe c
 eitherMaybe _ (Left _)  = Nothing
 eitherMaybe f (Right y) = Just (f y)
@@ -219,4 +223,24 @@ either2 :: (a -> c) -> (b -> c) -> Either a b -> c
 either2 f _ (Left x)  = f x
 either2 _ g (Right y) = g y
 
--- cont. p. 741
+{-
+eitherMaybe2 (*2) (Left "foo") == Nothing
+eitherMaybe2 (*2) (Right 3)    == Just 6
+-}
+eitherMaybe2 :: (b -> c) -> Either a b -> Maybe c
+eitherMaybe2 f = either2 (const Nothing) (Just . f)
+    -- Cheated
+
+-- Unfolds
+--
+{-
+take 10 $ myIterate (+1) 0 == [0,1,2,3,4,5,6,7,8,9]
+-}
+myIterate :: (a -> a) -> a -> [a]
+myIterate f x = x : myIterate f (f x)
+
+{-
+take 10 $ myUnfoldr (\b -> Just (b, b + 1)) 0 == [0,1,2,3,4,5,6,7,8,9]
+-}
+myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
+myUnfoldr = undefined

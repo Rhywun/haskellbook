@@ -20,7 +20,8 @@ _Chapter 11_
 
 _Chapter 12_
 * ~~countTheBeforeVowel~~
-* everything from "Small library for Maybe" forward
+* ~~everything from "Small library for Maybe" forward~~
+  myUnfoldr, betterIterate, unfold, treeBuild
 
 _Chapter 15_
 * Semigroups #9
