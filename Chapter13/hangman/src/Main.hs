@@ -56,11 +56,13 @@ data Puzzle =
   Puzzle String -- ^ The word we're trying to guess
          [Maybe Char] -- ^ The characters we've filled in so far
          String -- ^ Or [Char], the list of letters we've guessed so far
+         Int -- ^ Number of incorrect guesses so far
 
 -- | Render Puzzle including charaters filled in plus characters guessed
 instance Show Puzzle where
-  show (Puzzle _ discovered guessed) =
+  show (Puzzle _ discovered guessed incorrect) =
     (intersperse ' ' $ fmap renderPuzzleChar discovered) ++
+    " // Incorrect guesses: " ++ show incorrect ++
     " // Guessed so far: " ++ (intersperse ' ' $ sort guessed)
 
 -- | Construct a list of Nothing, one for each char in the puzzle word
@@ -68,7 +70,7 @@ instance Show Puzzle where
 freshPuzzle "hello" --> _ _ _ _ _ // Guessed so far:
 -}
 freshPuzzle :: String -> Puzzle
-freshPuzzle s = Puzzle s (map (const Nothing) s) []
+freshPuzzle s = Puzzle s (map (const Nothing) s) [] 0
     -- Was:     Puzzle s [Nothing | _ <- s] []
 
 -- | Whether the char is part of the puzzle word
@@ -76,29 +78,41 @@ freshPuzzle s = Puzzle s (map (const Nothing) s) []
 charInWord (freshPuzzle "hello") 'h' == True
 -}
 charInWord :: Puzzle -> Char -> Bool
-charInWord (Puzzle w _ _) c = c `elem` w
+charInWord (Puzzle w _ _ _) c = c `elem` w
 
 -- | Whether the char has been guessed already
 {-
 alreadyGuessed (freshPuzzle "hello") 'h' == False
 -}
 alreadyGuessed :: Puzzle -> Char -> Bool
-alreadyGuessed (Puzzle _ _ g) c = c `elem` g
+alreadyGuessed (Puzzle _ _ g _) c = c `elem` g
 
+{-
+fmap renderPuzzleChar [Nothing, Just 'h', Nothing, Just 'e', Nothing] == "_h_e_"
+-}
 renderPuzzleChar :: Maybe Char -> Char
 renderPuzzleChar Nothing  = '_'
 renderPuzzleChar (Just c) = c
 
 -- | Insert correctly guessed character into the puzzle's list of discovered chars
+{-
+p1 = fillInCharacter (freshPuzzle "hello") 'e'; p1 --> _ e _ _ _ // Guessed so far: e
+p2 = fillInCharacter p1 'l';                    p2 --> _ e l l _ // Guessed so far: e l
+p3 = fillInCharacter p2 'z';                    p3 --> _ e l l _ // Guessed so far: e l z
+-}
 fillInCharacter :: Puzzle -> Char -> Puzzle
-fillInCharacter (Puzzle word filledInSoFar s) c =
-  Puzzle word newFilledInSoFar (c : s)
+fillInCharacter (Puzzle word filledInSoFar s incorrect) c =
+  Puzzle word newFilledInSoFar (c : s) newIncorrect
   where
     zipper guessed wordChar guessChar =
       if wordChar == guessed
         then Just wordChar
         else guessChar
     newFilledInSoFar = zipWith (zipper c) word filledInSoFar
+    newIncorrect =
+      if c `elem` word
+        then incorrect
+        else incorrect + 1
 
 handleGuess :: Puzzle -> Char -> IO Puzzle
 handleGuess puzzle guess = do
@@ -108,23 +122,23 @@ handleGuess puzzle guess = do
       putStrLn "You already guessed that character, pick something else!"
       return puzzle
     (True, _) -> do
-      putStrLn "This character was in the word, filling in the word accordingly"
+      putStrLn "This character was in the word, filling in the word accordingly..."
       return (fillInCharacter puzzle guess)
     (False, _) -> do
       putStrLn "This character wasn't in the word, try again."
       return (fillInCharacter puzzle guess)
 
 gameOver :: Puzzle -> IO ()
-gameOver (Puzzle wordToGuess _ guessed) =
-  if (length guessed) > 7
+gameOver (Puzzle wordToGuess _ _ incorrect) =
+  if incorrect > 7
     then do
       putStrLn "You lose!"
-      putStrLn $ "The word was: " ++ wordToGuess
+      putStrLn $ "The word was: '" ++ wordToGuess ++ "'."
       exitSuccess
     else return ()
 
 gameWin :: Puzzle -> IO ()
-gameWin (Puzzle _ filledInSoFar _) =
+gameWin (Puzzle _ filledInSoFar _ _) =
   if all isJust filledInSoFar
     then do
       putStrLn "You win!"
@@ -142,10 +156,11 @@ runGame puzzle =
     guess <- getLine
     case guess of
       [c] -> handleGuess puzzle c >>= runGame
-      _   -> putStrLn "Your guess must be a single character"
+      _   -> putStrLn "Your guess must be a single character!"
 
 main :: IO ()
 main = do
+  putStrLn "Let's play Hangman - you get up to 7 wrong guesses!"
   word <- randomWord'
   let puzzle = freshPuzzle (fmap toLower word)
   runGame puzzle
