@@ -14,7 +14,6 @@ dividedBy n d = go n d 0
       | n' < d' = (i, n')
       | otherwise = go (n' - d') d' (i + 1)
 
-
 -- Intermission: Short Exercise - test this
 mult :: Int -> Int -> Int
 mult 0 _ = 0
@@ -46,6 +45,9 @@ genOrdering = elements [LT, EQ, GT]
 genChar :: Gen Char
 genChar = elements ['a' .. 'z']
 
+{-
+sample' (gen2ple :: Gen ([()], Char))
+-}
 gen2ple :: (Arbitrary a, Arbitrary b) => Gen (a, b)
 gen2ple = do
   a <- arbitrary
@@ -59,6 +61,11 @@ gen3ple = do
   c <- arbitrary
   return (a, b, c)
 
+{-
+sample' (genEither :: Gen (Either Int Char))
+-- Sample output:
+[Right '\DC1',Left 0,Right '\CAN',Left (-5),Right 'n',Left 9,Right '=',Right 'h', ...]
+-}
 genEither :: (Arbitrary a, Arbitrary b) => Gen (Either a b)
 genEither = do
   a <- arbitrary
@@ -66,20 +73,29 @@ genEither = do
   elements [Left a, Right b]
 
 -- Equal probability
+{-
+sample' (genMaybe :: Gen (Maybe Int))
+  --> [Just 0,Nothing,Just 1,Just 1,Just 5,Nothing,Just 10,Just (-6),Just 10,Nothing,Nothing]
+-}
 genMaybe :: Arbitrary a => Gen (Maybe a)
 genMaybe = do
   a <- arbitrary
   elements [Nothing, Just a]
 
--- What QuickCheck does so you get more Just values
+-- How to increase the ratio of Just values to Nothing values
+{-
+sample' (genMaybe' :: Gen (Maybe Int))
+  --> [Nothing,Nothing,Just 1,Just 4,Just 5,Nothing,Just 7,Just (-6),Nothing,Just (-2),Just (-4)]
+-}
 genMaybe' :: Arbitrary a => Gen (Maybe a)
 genMaybe' = do
   a <- arbitrary
   frequency [(1, return Nothing), (3, return (Just a))]
 
 -- Using QuickCheck without Hspec
+--
 prop_additionGreater :: Int -> Bool
-prop_additionGreater x = x + 0 > x
+prop_additionGreater x = x + 1 > x
 
 runQc :: IO ()
 runQc = quickCheck prop_additionGreater
