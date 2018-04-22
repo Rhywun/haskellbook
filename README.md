@@ -23,6 +23,9 @@ _Chapter 12_
 * ~~everything from "Small library for Maybe" forward~~
   myUnfoldr, betterIterate, unfold, treeBuild
 
+_Chapter 14_
+* Hangman testing
+
 _Chapter 15_
 * Semigroups #9
 * Semigroups #10
