@@ -1,10 +1,11 @@
-module Chapter15.Exercises.Monoids where
+module Monoids where
 
-import Data.Monoid
-import Test.QuickCheck
+import           Data.Monoid
+import           Test.QuickCheck
 
 -- Shortcuts
 qc prop = quickCheck prop
+
 vc prop = verboseCheck prop
 
 -- Associativity property
@@ -20,11 +21,13 @@ propIdentityR :: (Eq m, Monoid m) => m -> Bool
 propIdentityR x = x <> mempty == x
 
 -- 1
-
-data Trivial = Trivial deriving (Eq, Show)
+--
+data Trivial =
+  Trivial
+  deriving (Eq, Show)
 
 instance Monoid Trivial where
-  mempty      = Trivial
+  mempty = Trivial
   mappend _ _ = Trivial
 
 instance Arbitrary Trivial where
@@ -33,11 +36,13 @@ instance Arbitrary Trivial where
 type TrivialAssoc = Trivial -> Trivial -> Trivial -> Bool
 
 -- 2
-
-newtype Identity a = Identity a deriving (Eq, Show)
+--
+newtype Identity a =
+  Identity a
+  deriving (Eq, Show)
 
 instance Monoid a => Monoid (Identity a) where
-  mempty                            = Identity mempty
+  mempty = Identity mempty
   mappend (Identity x) (Identity y) = Identity (x <> y)
 
 instance Arbitrary a => Arbitrary (Identity a) where
@@ -45,11 +50,15 @@ instance Arbitrary a => Arbitrary (Identity a) where
     a <- arbitrary
     return (Identity a)
 
-type IdentityAssoc = Identity String -> Identity String -> Identity String -> Bool
+type IdentityAssoc
+   = Identity String -> Identity String -> Identity String -> Bool
 
 -- 3
-
-data Two a b = Two a b deriving (Eq, Show)
+--
+data Two a b =
+  Two a
+      b
+  deriving (Eq, Show)
 
 instance (Monoid a, Monoid b) => Monoid (Two a b) where
   mempty = Two mempty mempty
@@ -61,11 +70,14 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
     b <- arbitrary
     return (Two a b)
 
-type TwoAssoc = Two String String -> Two String String -> Two String String -> Bool
+type TwoAssoc
+   = Two String String -> Two String String -> Two String String -> Bool
 
 -- 4
-
-newtype BoolConj = BoolConj Bool deriving (Eq, Show)
+--
+newtype BoolConj =
+  BoolConj Bool
+  deriving (Eq, Show)
 
 instance Monoid BoolConj where
   mempty = BoolConj True
@@ -79,8 +91,10 @@ instance Arbitrary BoolConj where
 type BoolConjAssoc = BoolConj -> BoolConj -> BoolConj -> Bool
 
 -- 5
-
-newtype BoolDisj = BoolDisj Bool deriving (Eq, Show)
+--
+newtype BoolDisj =
+  BoolDisj Bool
+  deriving (Eq, Show)
 
 instance Monoid BoolDisj where
   mempty = BoolDisj False
@@ -94,14 +108,24 @@ instance Arbitrary BoolDisj where
 type BoolDisjAssoc = BoolDisj -> BoolDisj -> BoolDisj -> Bool
 
 -- 6
--- PASS
+--
+newtype Combine a b = Combine
+  { unCombine :: a -> b
+  }
+
+instance Monoid b => Monoid (Combine a b) where
+  mempty = Combine mempty
+  mappend (Combine f) (Combine g) = Combine (mappend f g)
+
+-- Again, I don't know where to go from here.
 
 -- 7
 -- PASS
-
-
 --
-
+-- 8
+-- PASS
+--
+--
 main :: IO ()
 main = do
   qc (propAssoc :: TrivialAssoc)

@@ -12,6 +12,9 @@ data Bool'
 
 instance CoArbitrary Bool'
 
+{-
+sample' trueGen -- [0,-1,-2,1,-3,-3,-1,-5,-4,-8,-20]
+-}
 trueGen = coarbitrary True' arbitrary :: Gen Int
 
 falseGen = coarbitrary False' arbitrary :: Gen Int

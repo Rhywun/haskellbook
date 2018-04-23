@@ -1,13 +1,19 @@
-module Chapter15.Exercises.Validation where
+module Validation where
 
-import Data.Semigroup
+import           Data.Semigroup
 
-data Validation a b = Failure a | Success b deriving (Eq, Show)
+-- Look familiar?
+-- Yes, it looks like `Either`
+--
+data Validation a b
+  = Failure a
+  | Success b
+  deriving (Eq, Show)
 
 instance Semigroup a => Semigroup (Validation a b) where
   Failure x <> Failure y = Failure (x <> y)
-  Success x <> _         = Success x
-  _ <> Success y         = Success y
+  Success x <> _ = Success x
+  _ <> Success y = Success y
 
 main = do
   let failure :: String -> Validation String Int
