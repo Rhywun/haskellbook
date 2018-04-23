@@ -130,6 +130,8 @@ data Two a b =
       b
   deriving (Eq, Show)
 
+--       This is why the first argument is unaffected when applying fmap
+--                    v
 instance Functor (Two a) where
   fmap f (Two a b) = Two a (f b)
 

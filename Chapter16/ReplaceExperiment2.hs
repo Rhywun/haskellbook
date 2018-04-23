@@ -1,11 +1,11 @@
-module Chapter16.ReplaceExperiment2 where
+module ReplaceExperiment2 where
 
 replaceWithP :: b -> Char
 replaceWithP = const 'p'
 
 -- fmap :: Functor f => (a -> b) -> f a -> f b
 -- fmap replaceWithP :: Functor f => f b -> f Char
-
+--
 lms :: [Maybe (Integer, Integer)]
 lms = [Just (1, 2), Nothing, Just (3, 4)]
 
@@ -14,7 +14,6 @@ replaceWithP' :: [Maybe (Integer, Integer)] -> Char
 replaceWithP' = replaceWithP
 
 -- fmap replaceWithP' :: Functor f => f [Maybe (Integer, Integer)] -> f Char
-
 liftedReplace :: Functor f => f a -> f Char
 liftedReplace = fmap replaceWithP
 
@@ -24,11 +23,11 @@ liftedReplace' = liftedReplace
 
 -- fmap liftedReplace         :: (Functor f2, Functor f1) => f1 (f2 a) -> f1 (f2 Char)
 -- (fmap . fmap) replaceWithP :: (Functor f2, Functor f1) => f1 (f2 a) -> f1 (f2 Char)
-
+--
 -- fmap liftedReplace' :: Functor f => f [Maybe (Integer, Integer)] -> f [Char]
 -- (fmap . fmap) replaceWithP'
 --    :: (Functor f2, Functor f1) => f1 (f2 [Maybe (Integer, Integer)]) -> f1 (f2 Char)
-
+--
 twiceLifted :: (Functor f1, Functor f) => f (f1 a) -> f (f1 Char)
 twiceLifted = (fmap . fmap) replaceWithP
 
@@ -43,9 +42,7 @@ thriceLifted = (fmap . fmap . fmap) replaceWithP
 thriceLifted' :: [Maybe [Char]] -> [Maybe [Char]]
 thriceLifted' = thriceLifted
 --}
-
 --
-
 main :: IO ()
 main = do
   putStr "replaceWithP' lms: "
