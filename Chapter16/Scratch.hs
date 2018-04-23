@@ -99,6 +99,8 @@ instance Functor CountingBad where
 --
 -- 16.7 - Commonly used functors
 --
+-- see ReplaceExperiment.hs
+--
 -- Exercises: Heavy Lifting
 --
 -- 1
