@@ -130,120 +130,38 @@ data Two a b =
       b
   deriving (Eq, Show)
 
---       This is why the first argument is unaffected when applying fmap
+--            We can't touch this
 --                    v
 instance Functor (Two a) where
   fmap f (Two a b) = Two a (f b)
+
+exTwo = (+ 1) <$> Two 1 2 -- Two 1 3
 
 data Or a b
   = First a
   | Second b
   deriving (Eq, Show)
 
+--        We can't touch this either
+--                   v
 instance Functor (Or a) where
   fmap _ (First a)  = First a
   fmap f (Second b) = Second (f b)
 
+exOr1 = (+ 1) <$> First 3 -- First 3
+
+exOr2 = (+ 1) <$> Second 4 -- Second 5
+
 --
 -- 16.9 - QuickChecking Functor instances
---
--- Properties for our laws:
-prop_functorIdentity :: (Functor f, Eq (f a)) => f a -> Bool
-prop_functorIdentity f = fmap id f == f
-
-prop_functorCompose ::
-     (Functor f, Eq (f c)) => (a -> b) -> (b -> c) -> f a -> Bool
-prop_functorCompose f g x = fmap g (fmap f x) == fmap (g . f) x
-
---
 -- 16.10 - Exercises: Instances of Func
---
--- 1
---
-newtype Identity a =
-  Identity a
-  deriving (Eq, Show)
-
-instance Functor Identity where
-  fmap f (Identity a) = Identity (f a)
-
--- 2
---
-data Pair a =
-  Pair a
-       a
-  deriving (Eq, Show)
-
-instance Functor Pair where
-  fmap f (Pair x y) = Pair (f x) (f y)
-
--- 3
---
-data Two' a b =
-  Two' a
-       b
-  deriving (Eq, Show)
-
-instance Functor (Two' a) where
-  fmap f (Two' x y) = Two' x (f y)
-
--- 4
---
-data Three a b c =
-  Three a
-        b
-        c
-  deriving (Eq, Show)
-
-instance Functor (Three a b) where
-  fmap f (Three x y z) = Three x y (f z)
-
--- 5
---
-data Three' a b =
-  Three' a
-         b
-         b
-  deriving (Eq, Show)
-
-instance Functor (Three' a) where
-  fmap f (Three' x y z) = Three' x (f y) (f z)
-
--- 6
---
-data Four a b c d =
-  Four a
-       b
-       c
-       d
-  deriving (Eq, Show)
-
-instance Functor (Four a b c) where
-  fmap f (Four w x y z) = Four w x y (f z)
-
--- 7
---
-data Four' a b =
-  Four' a
-        a
-        a
-        b
-  deriving (Eq, Show)
-
-instance Functor (Four' a) where
-  fmap f (Four' w x y z) = Four' w x y (f z)
-
--- 8
---
-data Trivial =
-  Trivial
-
--- No, because there isn't a type variable.
+-- see QuickChecking.hs
 --
 --
 -- 16.11 - Ignoring possibilities
 --
 -- Maybe: Meh
+--
 incIfJust :: Num a => Maybe a -> Maybe a
 incIfJust (Just n) = Just $ n + 1
 incIfJust Nothing  = Nothing
@@ -252,21 +170,24 @@ showIfJust :: Show a => Maybe a -> Maybe String
 showIfJust (Just s) = Just $ show s
 showIfJust Nothing  = Nothing
 
--- Better
+-- Better (Functor pattern abstracted out)
+--
 incMaybe :: Num a => Maybe a -> Maybe a
 incMaybe m = fmap (+ 1) m
 
 showMaybe :: Show a => Maybe a -> Maybe String
 showMaybe s = fmap show s
 
--- A little better
+-- A little better (eta-reduced)
+--
 incMaybe' :: Num a => Maybe a -> Maybe a
 incMaybe' = fmap (+ 1)
 
 showMaybe' :: Show a => Maybe a -> Maybe String
 showMaybe' = fmap show
 
--- Even better
+-- Even better (generic)
+--
 liftedInc :: (Functor f, Num a) => f a -> f a
 liftedInc = fmap (+ 1)
 
@@ -274,6 +195,7 @@ liftedShow :: (Functor f, Show a) => f a -> f String
 liftedShow = fmap show
 
 -- Exercise: Possibly
+--
 data Possibly a
   = LolNope
   | Yeppers a
@@ -284,6 +206,7 @@ instance Functor Possibly where
   fmap f (Yeppers a) = Yeppers (f a)
 
 -- Either: Meh
+--
 incIfRight :: Num a => Either e a -> Either e a
 incIfRight (Right n) = Right $ n + 1
 incIfRight (Left e)  = Left e
@@ -293,6 +216,7 @@ showIfRight (Right s) = Right $ show s
 showIfRight (Left e)  = Left e
 
 -- Better
+--
 incEither :: Num a => Either e a -> Either e a
 incEither m = fmap (+ 1) m
 
@@ -300,14 +224,20 @@ showEither :: Show a => Either e a -> Either e String
 showEither s = fmap show s
 
 -- A little better
+--
 incEither' :: Num a => Either e a -> Either e a
 incEither' = fmap (+ 1)
 
 showEither' :: Show a => Either e a -> Either e String
 showEither' = fmap show
 
--- Even better: see `liftedInc` and `liftedShow` above
+-- Even better: same as `liftedInc` and `liftedShow` above!
+--
+--
 -- Short Exercise
+--
+-- 1
+--
 data Sum a b
   = First' a
   | Second' b
@@ -317,6 +247,11 @@ instance Functor (Sum a) where
   fmap _ (First' a)  = First' a
   fmap f (Second' b) = Second' (f b)
 
+-- 2
+-- Becase the kind of Sum is * -> * -> * which isn't compatible with Functor, so
+-- we partially apply the type to make it kind * -> *. The `a` associated with First'
+-- is therefore applied to give (Sum a) and cannot be modified by `fmap`.
+--
 --
 -- 16.13 - More structure, more functors
 --
