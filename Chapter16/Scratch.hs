@@ -255,18 +255,23 @@ instance Functor (Sum a) where
 --
 -- 16.13 - More structure, more functors
 --
-data Wrap f a =
+newtype Wrap f a =
   Wrap (f a)
   deriving (Eq, Show)
 
 instance Functor f => Functor (Wrap f) where
-  fmap f (Wrap fa) = Wrap (fmap f fa)
+  fmap f (Wrap fa) = Wrap (fmap f fa) -- `fa` means "`a` is a Functor"
 
 --
 -- 16.14 - IO Functor
 --
 getInt :: IO Int
 getInt = fmap read getLine
+
+meTooIsm :: IO String
+meTooIsm = do
+  input <- getLine
+  return (input ++ " and me too!")
 
 bumpIt :: IO Int
 bumpIt = do
@@ -275,6 +280,7 @@ bumpIt = do
 
 --
 -- 16.15 - What if we want to do something different?
+-- (N.B. I don't understand this. At all.)
 --
 -- nat :: (f -> g) -> f a -> g a
 type Nat f g = forall a. f a -> g a
@@ -287,3 +293,8 @@ degenerateMtl :: Nat Maybe []
 degenerateMtl Nothing  = []
 degenerateMtl (Just a) = [a + 1]
 -}
+--
+--
+-- 16.16 - Functors are unique to a datatype
+--
+-- lolwut
