@@ -1,5 +1,5 @@
-import Data.Functor.Constant
-import Data.Monoid
+import           Data.Functor.Constant
+import           Data.Monoid
 
 {-
 -- f ~ Constant e
@@ -11,9 +11,9 @@ type C = Constant
 pure :: a -> f a
 pure :: a -> C e a
 -}
-
+--
 f = Constant (Sum 1)
+
 g = Constant (Sum 2)
 
 r = f <*> g
-

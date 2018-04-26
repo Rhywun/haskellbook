@@ -39,20 +39,12 @@ b4 = Just (* 2) <*> Just 2 -- Just 4, `f` is Maybe
 --   fmap (*2) (Just 2)     -- Just 4
 c4 = Just (* 2) <*> Nothing -- Nothing
 
-
-
-
-
-
-
-
-
 -- Show me the monoids
 -- (The first items in each tuple are mappend'ed)
 --
 d4 = ("Woo", (+ 1)) <*> (" Hoo!", 0) -- ("Woo Hoo!", 1), `f` is (,)
 
-e4 = (Sum 2, (+ 1)) <*> (Sum 0, 0) -- (Sum {getSum = 2}, 1)
+e4 = (Sum 2, (+ 1)) <*> (Sum 5, 4) -- (Sum {getSum = 7}, 5)
 
 f4 = (Product 3, (+ 9)) <*> (Product 2, 8) -- (Product {getProduct = 6}, 17)
 
@@ -62,7 +54,7 @@ g4 = (All True, (+ 1)) <*> (All False, 0) -- (All {getAll = False}, 1)
 {-
 instance (Monoid a, Monoid b) => Monoid (a,b) where
   mempty = (mempty, mempty)
-  (a  , b) `mappend` (a',b') = (a `mappend` a', b `mappend` b')
+  (a  , b) `mappend` (a', b') = (a `mappend` a', b `mappend` b')
 
 instance Monoid a => Applicative ((,) a) where
   pure x = (mempty, x)
@@ -74,6 +66,7 @@ instance Monoid a => Applicative ((,) a) where
 --
 -- List
 {-
+:set -XTypeApplications
 (<*>) @[] :: [a -> b] -> [a] -> [b]
 pure @[] :: a -> [a]
 -}
@@ -98,23 +91,26 @@ g5 = liftA2 max [1, 2] [1, 4] -- -> [1, 4, 2, 4]
 -- -> looks up a key in an association list
 h5 = lookup 3 [(3, "hello")] -- -> Just "hello"
 
+-- More examples:
+-- see lookup.hs
+--
 -- Exercises: Lookups
 --
 -- 1
 --
 added :: Maybe Integer
-added = (+ 3) <$> lookup 3 (zip [1, 2, 3] [4, 5, 6])
+added = (+ 3) <$> lookup 3 (zip [1, 2, 3] [4, 5, 6]) -- Just 9
 
 -- 2
 --
 y2 :: Maybe Integer
-y2 = lookup 3 $ zip [1, 2, 3] [4, 5, 6]
+y2 = lookup 3 $ zip [1, 2, 3] [4, 5, 6] -- Just 6
 
 z2 :: Maybe Integer
-z2 = lookup 2 $ zip [1, 2, 3] [4, 5, 6]
+z2 = lookup 2 $ zip [1, 2, 3] [4, 5, 6] -- Just 5
 
 tupled :: Maybe (Integer, Integer)
-tupled = (,) <$> y2 <*> z2
+tupled = (,) <$> y2 <*> z2 -- Just (6, 5)
 
 -- 3
 --
@@ -128,7 +124,7 @@ max' :: Int -> Int -> Int -- Why is this here?
 max' = max
 
 maxed :: Maybe Int
-maxed = max' <$> x3 <*> y3 -- Just 3
+maxed = max <$> x3 <*> y3 -- Just 3
 
 -- 4
 --
@@ -147,7 +143,9 @@ summed = fmap sum $ (,) <$> x4 <*> y4
 
 -- Identity
 -- see identity.hs
+--
 -- Exercise: Identity Instance
+--
 newtype Identity a =
   Identity a
   deriving (Eq, Ord, Show)
@@ -161,7 +159,9 @@ instance Applicative Identity where
 
 -- Constant
 -- see constant.hs
+--
 -- Exercise: Constant Instance
+--
 newtype Constant a b = Constant
   { getConstant :: a
   } deriving (Eq, Ord, Show)
@@ -175,11 +175,16 @@ instance Monoid a => Applicative (Constant a) where
 
 -- Maybe Applicative
 -- see maybe.hs
+--
 -- Exercise: Fixer Upper
+--
 fu1 = const <$> Just "Hello" <*> pure "World"
 
 fu2 = (,,,) <$> Just 90 <*> Just 10 <*> Just "Tierness" <*> pure [1, 2, 3]
+--
+--
 -- 17.6 - Applicative laws
+--
 {-
 -- Identity
 pure id <*> v = v
