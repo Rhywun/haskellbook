@@ -21,15 +21,37 @@ instance Eq a => EqProp (ZipList a) where
   (=-=) = eq
 
 -- List Applicative Exercise
+--    cheat cheat cheat
+--
 data List a
   = Nil
   | Cons a
          (List a)
   deriving (Eq, Show)
 
+append :: List a -> List a -> List a
+append Nil ys         = ys
+append (Cons x xs) ys = Cons x $ xs `append` ys
+
 instance Functor List where
-  fmap = undefined
+  fmap _ Nil           = Nil
+  fmap f (Cons x rest) = Cons (f x) (fmap f rest)
 
 instance Applicative List where
-  pure = undefined
-  (<*>) = undefined
+  pure x = Cons x Nil
+  (<*>) Nil _          = Nil
+  (<*>) _ Nil          = Nil
+  (<*>) (Cons f fs) xs = append (fmap f xs) (fs <*> xs)
+
+{-
+> f = Cons (+1) (Cons (*2) Nil)
+> v = Cons 1 (Cons 2 Nil)
+> f <*> v
+  Cons 2 (Cons 3 (Cons 2 (Cons 4 Nil)))
+-}
+--
+instance EqProp List where
+  (=-=) = eq
+
+
+-- totally lost here
