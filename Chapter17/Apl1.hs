@@ -54,4 +54,4 @@ instance EqProp List where
   (=-=) = eq
 
 
--- totally lost here
+-- totally lost here... moving on

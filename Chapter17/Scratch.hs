@@ -226,4 +226,4 @@ law4c = (Just (+ 3) <*> pure 1) == (pure ($ 1) <*> Just (+ 3)) -- Just 4
 -- see BadMonoid.hs
 --
 -- 17.8 - ZipList Monoid
--- see Apl1.hs, FWIW
+-- see Apl1.hs, FWIW...
