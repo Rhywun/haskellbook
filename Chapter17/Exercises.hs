@@ -1,4 +1,4 @@
-module Chapter17.Exercises where
+module Exercises where
 
 -- import Control.Applicative
 import Data.Monoid

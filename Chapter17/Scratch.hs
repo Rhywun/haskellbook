@@ -176,50 +176,54 @@ instance Monoid a => Applicative (Constant a) where
 -- Maybe Applicative
 -- see maybe.hs
 --
+--
 -- Exercise: Fixer Upper
 --
 fu1 = const <$> Just "Hello" <*> pure "World"
 
 fu2 = (,,,) <$> Just 90 <*> Just 10 <*> Just "Tierness" <*> pure [1, 2, 3]
+
 --
 --
 -- 17.6 - Applicative laws
 --
-{-
 -- Identity
-pure id <*> v = v
+--
+-- pure id <*> v == v
+--
+law1 = (pure id <*> Just "hello") == Just "hello"
 
-pure id <*> Just "hello"              -- Just "hello"
--}
-{-
 -- Composition
-pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
+--
+-- pure (.) <*> u <*> v <*> w == u <*> (v <*> w)
+--
+law2a =
+  (pure (.) <*> [(+ 1)] <*> [(* 2)] <*> [1, 2, 3]) ==
+  ([(+ 1)] <*> ([(* 2)] <*> [1, 2, 3])) -- [3,5,7]
 
-pure (.) <*> [(+1)] <*> [(*2)] <*> [1,2,3]    -- [3,5,7]
-[(+1)] <*> ([(*2)] <*> [1,2,3])               -- [3,5,7]
+law2b =
+  (pure (.) <*> Just (+ 1) <*> Just (* 2) <*> Just 1) ==
+  (Just (+ 1) <*> (Just (* 2) <*> Just 1)) -- Just 3
 
-pure (.) <*> Just (+1) <*> Just (*2) <*> Just 1     -- Just 3
-Just (+1) <*> (Just (*2) <*> Just 1)                -- Just 3
--}
-{-
 -- Homomorphism
-pure f <*> pure x = pure (f x)
+--
+-- pure f <*> pure x == pure (f x)
+--
+law3 = (pure (+ 1) <*> pure 2 :: Maybe Int) == (pure ((+ 1) 2) :: Maybe Int) -- Just 3
 
-pure (+1) <*> pure 2 :: Maybe Int   -- Just 3
-pure ((+1) 2) :: Maybe Int          -- Just 3
--}
-{-
 -- Interchange
-u <*> pure y = pure ($ y) <*> u
+--
+-- u <*> pure y = pure ($ y) <*> u
+--
+law4a = (Just (+ 2) <*> pure 3) == (pure ($ 3) <*> Just (+ 2)) -- Just 5
 
-Just (+2) <*> pure 3            -- Just 5
-pure ($ 2) <*> Just (+3)        -- Just 5
+law4b = ([(+ 1), (* 2)] <*> pure 1) == (pure ($ 1) <*> [(+ 1), (* 2)]) -- [2,2]
 
-[(+1), (*2)] <*> pure 1         -- [2,2]
-pure ($ 1) <*> [(+1), (*2)]     -- [2,2]
-
-Just (+3) <*> pure 1            -- Just 4
-pure ($ 1) <*> Just (+3)        -- Just 4
--}
+law4c = (Just (+ 3) <*> pure 1) == (pure ($ 1) <*> Just (+ 3)) -- Just 4
+--
+--
+-- 17.7 - You knew this was coming
+-- see BadMonoid.hs
+--
 -- 17.8 - ZipList Monoid
 -- see Apl1.hs
