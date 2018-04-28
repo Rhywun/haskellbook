@@ -220,6 +220,7 @@ law4a = (Just (+ 2) <*> pure 3) == (pure ($ 3) <*> Just (+ 2)) -- Just 5
 law4b = ([(+ 1), (* 2)] <*> pure 1) == (pure ($ 1) <*> [(+ 1), (* 2)]) -- [2,2]
 
 law4c = (Just (+ 3) <*> pure 1) == (pure ($ 1) <*> Just (+ 3)) -- Just 4
+
 --
 --
 -- 17.7 - You knew this was coming
@@ -227,3 +228,41 @@ law4c = (Just (+ 3) <*> pure 1) == (pure ($ 1) <*> Just (+ 3)) -- Just 4
 --
 -- 17.8 - ZipList Monoid
 -- see Apl1.hs, FWIW...
+--
+-- Validation
+-- Same as Either but with different behavior on the applicative:
+-- Instead of "short-circuiting" on two Lefts, it combines two Failures
+--
+data Validation err a
+  = Failure err
+  | Success a
+  deriving (Eq, Show)
+
+data Errors
+  = DividedByZero
+  | StackOverflow
+  | MooglesChewedWires
+  deriving (Eq, Show)
+
+instance Functor (Validation e) where
+  fmap _ (Failure e) = Failure e
+  fmap f (Success a) = Success (f a)
+
+instance Monoid e => Applicative (Validation e) where
+  pure = Success
+  (Failure e) <*> (Failure e') = Failure (e <> e')
+  (Failure e) <*> _ = Failure e
+  _ <*> (Failure e) = Failure e
+  (Success f) <*> (Success a) = Success (f a)
+
+success = Success (+ 1) <*> Success 1 :: Validation [Errors] Int
+  -- Success 2
+
+failure = Success (+ 1) <*> Failure [StackOverflow] :: Validation [Errors] Int
+  -- Failure [StackOverflow]
+
+failure' = Failure [StackOverflow] <*> Success (+ 1)
+  -- Failure [StackOverflow]
+
+failures = Failure [MooglesChewedWires] <*> Failure [StackOverflow]
+  -- Failure [MooglesChewedWires,StackOverflow]
