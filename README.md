@@ -53,5 +53,6 @@ _Chapter 18_
     * Write functions #5
     * Write functions #6
 
-
-https://github.com/andrewMacmurray/haskell-book-solutions/
+_Chapter 19_
+* Most of the end-to-end example - come back to it if I feel like installing Redis
+* Exercise
