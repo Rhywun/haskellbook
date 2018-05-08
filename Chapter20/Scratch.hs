@@ -205,15 +205,15 @@ product' [2,3,4] == 24
 product' :: (Foldable t, Num a) => t a -> a
 product' = getProduct . foldMap Product
 
--- 3 - no idea
+-- 3 - PASS
 elem' :: (Foldable t, Eq a) => a -> t a -> Bool
 elem' = undefined
 
--- 4
+-- 4 - PASS
 minimum' :: (Foldable t, Ord a) => t a -> Maybe a
 minimum' = undefined
 
--- 5
+-- 5 - PASS
 maximum' :: (Foldable t, Ord a) => t a -> Maybe a
 maximum' = undefined
 
@@ -226,6 +226,27 @@ null' (Right 3) == False
 null' :: (Foldable t) => t a -> Bool
 null' t = length t == 0
 
--- 7
+-- 7 - PASS
 length' :: (Foldable t) => t a -> Int
 length' = undefined
+
+-- 8
+{-
+toList' (1,2) == [2]
+toList' (Left 1) == []
+toList' (Just 1) == [1]
+-}
+toList' :: (Foldable t) => t a -> [a]
+toList' = foldr (:) []
+
+-- 9
+{-
+fold' ["hello", "julie"] == "hellojulie"
+fold' $ map Sum [1 .. 5] == Sum {getSum = 15}
+-}
+fold' :: (Foldable t, Monoid m) => t m -> m
+fold' = foldMap id
+
+-- 10
+foldMap' :: (Foldable t, Monoid m) => (a -> m) -> t a -> m
+foldMap' = undefined

@@ -56,3 +56,12 @@ _Chapter 18_
 _Chapter 19_
 * Most of the end-to-end example - come back to it if I feel like installing Redis
 * Exercise
+
+_Chapter 20_
+* Exercises: Library Functions #3
+* Exercises: Library Functions #4
+* Exercises: Library Functions #5
+* Exercises: Library Functions #7
+* Exercises: Library Functions #10
+* Chapter Exercises
+    * filterF
