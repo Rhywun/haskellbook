@@ -1,20 +1,23 @@
-module Exercises where
+module Chapter02.Exercises where
 
 --
 -- 2.5
 --
+
 -- 1
 -- No change is required in the REPL for either, in my version of GHC.
---
+
 -- 2
 piTimesDouble x = 3.14 * x * x
 
 -- 3
-piTimesDouble' x = pi * x * x
+piTimesDouble' x = pi * x * x -- or
+piRSquared r = pi * (r ^ 2)
 
 --
 -- 2.6
 --
+
 -- 1
 -- Different
 e020601 = 8 + 7 * 9 == (8 + 7) * 9 -- False
@@ -37,6 +40,8 @@ e020603 = f020603 534 == f020603' 534 -- False
 
 --
 -- 2.7
+--
+
 -- 1
 area x = 3.14 * (x * x)
 
@@ -44,6 +49,7 @@ area x = 3.14 * (x * x)
 double x = x * 2
 
 -- 3
+
 x = 7
 
 y = 10
@@ -53,46 +59,43 @@ f = x + y
 --
 -- 2.10
 --
+
 -- 1
-e021001 =
-  let x = 5
-  in x -- 5
+e021001 = let x = 5 in x -- 5
 
 -- 2
-e021002 =
-  let x = 5
-  in x * x -- 25
+e021002 = let x = 5 in x * x -- 25
 
 -- 3
 e021003 =
   let x = 5
       y = 6
-  in x * y -- 30
+  in  x * y -- 30
 
 -- 4
 e021004 =
   let x = 3
       y = 1000
-  in x + 3 -- 6
+  in  x + 3 -- 6
 
 -- 1
 f1 = x * 3 + y
-  where
-    x = 3
-    y = 1000
+ where
+  x = 3
+  y = 1000
 
 -- 2
 f2 = x * 5
-  where
-    y = 10
-    x = 10 * 5 + y
+ where
+  y = 10
+  x = 10 * 5 + y
 
 -- 3
 f3 = z / x + y
-  where
-    x = 7
-    y = negate x
-    z = y * 10
+ where
+  x = 7
+  y = negate x
+  z = y * 10
 
 --
 -- 2.11
@@ -120,10 +123,10 @@ b3b = ((2 ^ 2) * (4 ^ 5)) + 1
 -- 1
 --
 waxOn = x * 5
-  where
-    z = 7
-    y = z + 8
-    x = y ^ 2
+ where
+  z = 7
+  y = z + 8
+  x = y ^ 2
 
 -- 10 + waxOn == 1135
 -- (+10) waxOn == 1135

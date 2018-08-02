@@ -1,4 +1,4 @@
-module FunctionWithLet where
+module Chapter02.FunctionWithLet where
 
 printInc n =
   let plusTwo = n + 2

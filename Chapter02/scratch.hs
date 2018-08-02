@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter02.Scratch where
 
 triple x = x * 3
 

@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter04.Scratch where
 
 --
 -- Comparing values

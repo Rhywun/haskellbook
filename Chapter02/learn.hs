@@ -1,4 +1,4 @@
-module Learn where
+module Chapter02.Learn where
 
 x = 10 * 5 + y
 
