@@ -1,4 +1,4 @@
-module Print3Broken where
+module Chapter03.Print3Broken where
 
 -- Uncomment this line to fix
 greeting = "Yarrrrr"

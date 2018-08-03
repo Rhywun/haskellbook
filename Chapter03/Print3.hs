@@ -1,4 +1,4 @@
-module Print3 where
+module Chapter03.Print3 where
 
 myGreeting :: String
 -- The above line reads as: "myGreeting has the type String"

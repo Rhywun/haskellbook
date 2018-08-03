@@ -1,4 +1,4 @@
-module TopOrLocal where
+module Chapter03.TopOrLocal where
 
 topLevelFunction :: Integer -> Integer
 topLevelFunction x = x + woot + topLevelValue

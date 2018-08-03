@@ -1,4 +1,4 @@
-module Exercises where
+module Chapter03.Exercises where
 
 -- 3.4 - Scope
 --

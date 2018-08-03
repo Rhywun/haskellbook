@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter03.Scratch where
 
 -- see Print1.hs
 -- see Print2.hs
