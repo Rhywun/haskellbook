@@ -30,3 +30,11 @@ waxOn = x * 5
     x = y ^ 2
 
 waxOff x = triple x
+
+-- Test
+
+a :: IO String
+a = do
+  putStr "Number? "
+  getLine
+

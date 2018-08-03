@@ -1,5 +1,3 @@
 module Chapter02.FunctionWithLet where
 
-printInc n =
-  let plusTwo = n + 2
-  in print plusTwo
+printInc n = let plusTwo = n + 2 in print plusTwo
