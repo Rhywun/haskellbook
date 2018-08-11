@@ -1,4 +1,4 @@
-module Exercises where
+module Chapter13.Exercises where
 
 import           Control.Monad
 import           Data.Char     (toLower)

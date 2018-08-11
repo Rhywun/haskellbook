@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter13.Scratch where
 
 -- Intermission: Check your understanding
 --

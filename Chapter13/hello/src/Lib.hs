@@ -1,6 +1,7 @@
 module Lib
   ( sayHello
-  ) where
+  )
+where
 
 sayHello :: String -> IO ()
-sayHello name = putStrLn ("Hi, " ++ name ++ "!")
+sayHello name = putStrLn $ "Hi, " ++ name ++ "!"
