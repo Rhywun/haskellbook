@@ -1,4 +1,4 @@
-module Ciphers where
+module Chapter11.Ciphers where
 
 import           Data.Char
 import           System.IO
@@ -14,25 +14,22 @@ int2char n = chr (ord 'a' + n)
 -- Shifts char c to the right by n letters; operates only on
 -- lower-case letters; wraps at alphabet end
 shift :: Int -> Char -> Char
-shift n c
-  | isLower c = int2char ((char2int c + n) `mod` 26)
-  | otherwise = c
+shift n c | isLower c = int2char ((char2int c + n) `mod` 26)
+          | otherwise = c
 
 {-
 vigenere "ally" "meetatdawn" == "mppraeoywy"
 -}
 vigenere :: String -> String -> String
 vigenere ks xs = map (\z -> shift (char2int $ snd z) (fst z)) zs
-  where
-    zs = zip xs $ cycle ks
+  where zs = zip xs $ cycle ks
 
 {-
 (unvigenere "ally" $ vigenere "ally" "meetatdawn") == "meetatdawn"
 -}
 unvigenere :: String -> String -> String
 unvigenere ks xs = map (\z -> shift (negate $ char2int $ snd z) (fst z)) zs
-  where
-    zs = zip xs $ cycle ks
+  where zs = zip xs $ cycle ks
 
 main :: IO ()
 main = do

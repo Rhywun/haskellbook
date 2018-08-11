@@ -8,7 +8,7 @@ license-file:        LICENSE
 author:              Patrick Huffer
 maintainer:          rhywun@rhywun.com
 copyright:           Patrick Huffer
-category:            Web
+category:            Game
 build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:  README.md
@@ -18,3 +18,5 @@ executable hangman
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
+                     , random
+                     , split
