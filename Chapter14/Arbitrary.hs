@@ -1,13 +1,14 @@
 module Chapter14.Arbitrary where
 
 import           Test.QuickCheck
-import           Test.QuickCheck.Gen (oneof)
+import           Test.QuickCheck.Gen            ( oneof )
 
 --
 -- 14.6 - Arbitrary instances
 --
+
 -- Trivial
---
+
 data Trivial =
   Trivial
   deriving (Eq, Show)
@@ -19,7 +20,7 @@ instance Arbitrary Trivial where
   arbitrary = trivialGen
 
 -- Identity
---
+
 newtype Identity a =
   Identity a
   deriving (Eq, Show)
@@ -36,7 +37,7 @@ identityGenInt :: Gen (Identity Int)
 identityGenInt = identityGen
 
 -- Pair (i.e., a Product)
---
+
 data Pair a b =
   Pair a
        b
@@ -55,7 +56,7 @@ pairGenIntString :: Gen (Pair Int String)
 pairGenIntString = pairGen
 
 -- Sum (e.g. Either)
---
+
 data Sum a b
   = First a
   | Second b
@@ -81,7 +82,7 @@ sumGenCharIntFirst :: Gen (Sum Char Int)
 sumGenCharIntFirst = sumGenFirstPls
 
 -- Main
---
+
 main :: IO ()
 main = do
   sample trivialGen
