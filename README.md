@@ -1,5 +1,5 @@
 # haskellbook
-Coding along with "[Haskell Programming From First Principles](https://haskellbook.com)"
+Coding along with "[Haskell Programming From First Principles](http://haskellbook.com)"
 
 *TODO*
 * Reformat all files with `brittany` which I started using in mid-2018 as part of
