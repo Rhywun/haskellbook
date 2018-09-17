@@ -64,3 +64,5 @@ _Chapter 20_
 * Exercises: Library Functions #10
 * Chapter Exercises
     * filterF
+
+*This is as far as I've progressed*
