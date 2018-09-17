@@ -1,4 +1,4 @@
-module MatchingTuples where
+module Chapter07.MatchingTuples where
 
 addEmUp2 :: Num a => (a, a) -> a
 addEmUp2 (x, y) = x + y

@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter09.Scratch where
 
 import           Data.Bool
 

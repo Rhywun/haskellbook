@@ -1,4 +1,4 @@
-module Phone where
+module Chapter11.Phone where
 
 import           Data.Char
 import           Data.List

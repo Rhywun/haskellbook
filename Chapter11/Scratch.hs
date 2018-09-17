@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter11.Scratch where
 
 import           Data.Int
 

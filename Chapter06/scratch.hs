@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter06.Scratch where
 
 --
 -- 6.5 - Writing typeclass instances

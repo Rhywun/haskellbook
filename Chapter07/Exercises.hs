@@ -1,4 +1,4 @@
-module Exercises where
+module Chapter07.Exercises where
 
 --
 -- 7.3 - Grab Bag

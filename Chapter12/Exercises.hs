@@ -1,4 +1,4 @@
-module Exercises where
+module Chapter12.Exercises where
 
 import           Data.List
 import           Data.Maybe

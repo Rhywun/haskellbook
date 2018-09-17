@@ -1,4 +1,4 @@
-module Sing where
+module Chapter05.Sing where
 
 fstString :: String -> String
 fstString x = x ++ " in the rain"

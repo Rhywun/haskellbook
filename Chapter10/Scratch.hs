@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter10.Scratch where
 
 import           Data.Time
 

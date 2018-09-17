@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter05.Scratch where
 
 --
 -- 5.3 - How to read type signatures

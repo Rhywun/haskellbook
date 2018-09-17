@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter08.Scratch where
 
 --
 -- 8.2 - Factorial!

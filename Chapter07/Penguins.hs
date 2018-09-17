@@ -1,4 +1,4 @@
-module Penguins where
+module Chapter07.Penguins where
 
 data WherePenguinsLive
   = Galapagos

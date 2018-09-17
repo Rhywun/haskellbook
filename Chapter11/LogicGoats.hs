@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 
-module LogicGoats where
+module Chapter11.LogicGoats where
 
 class TooMany a where
     tooMany :: a -> Bool

@@ -1,4 +1,4 @@
-module WordNumberTest where
+module Chapter14.WordNumberTest where
 
 import           Test.Hspec
 import           WordNumber (digitToWord, digits, wordNumber)

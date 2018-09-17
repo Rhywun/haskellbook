@@ -1,4 +1,4 @@
-module Exercises where
+module Chapter08.Exercises where
 
 --
 -- Review of types

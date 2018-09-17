@@ -1,4 +1,4 @@
-module Exercises where
+module Chapter05.Exercises where
 
 --
 -- 5.3 - Type Matching

@@ -1,4 +1,4 @@
-module Ciphers where
+module Chapter14.Ciphers where
 
 import           Data.Char       (chr, isLower, ord)
 import           Test.QuickCheck

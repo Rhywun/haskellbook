@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter07.Scratch where
 
 --
 -- 7.2 - Arguments and parameters

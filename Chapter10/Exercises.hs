@@ -1,4 +1,4 @@
-module Exercises where
+module Chapter10.Exercises where
 
 --
 -- Warm-up and review

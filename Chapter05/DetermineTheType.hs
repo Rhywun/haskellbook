@@ -1,6 +1,6 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
-module DetermineTheType where
+module Chapter05.DetermineTheType where
 
 -- Without the NoMonomorphismRestriction language extension, this
 -- defaults to :: Integer instead of :: Num p => p

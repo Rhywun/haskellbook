@@ -1,4 +1,4 @@
-module PoemLines where
+module Chapter09.PoemLines where
 
 firstSen = "Tyger Tyger, burning bright\n"
 secondSen = "In the forests of the night\n"

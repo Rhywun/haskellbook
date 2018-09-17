@@ -1,4 +1,4 @@
-module RegisteredUser where
+module Chapter07.RegisteredUser where
 
 newtype Username =
   Username String

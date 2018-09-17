@@ -1,4 +1,4 @@
-module GreetIfCool3 where
+module Chapter07.GreetIfCool3 where
 
 greetIfCool :: String -> IO ()
 greetIfCool coolness =

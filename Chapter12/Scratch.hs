@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter12.Scratch where
 
 --
 -- 12.2 - How I learned to stop worrying and love Nothing
