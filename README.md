@@ -26,7 +26,7 @@ Coding along with "[Haskell Programming From First Principles](http://haskellboo
     * Chapter 12
         * ~~countTheBeforeVowel~~
         * ~~everything from "Small library for Maybe" forward~~ myUnfoldr, betterIterate,
-          unfold, treeBuild
+          unfold, treeBuild - i.e. anything with folds, ugh
 
     * Chapter 14
         * Hangman testing

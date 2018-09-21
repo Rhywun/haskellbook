@@ -4,18 +4,17 @@ import           Data.List
 import           Data.Maybe
 
 -- Determine the kinds
---
+
 -- 1. *
 -- 2. *, * -> *
---
---
+
 -- String processing
---
+
 -- Replace "the" with Nothing
 {-
-notThe "the"         == Nothing
-notThe "blahtheblah" == Just "blahtheblah"
-notThe "woot"        == Just "woot"
+notThe "the"         -- Nothing
+notThe "blahtheblah" -- Just "blahtheblah"
+notThe "woot"        -- Just "woot"
 -}
 notThe :: String -> Maybe String
 notThe "the" = Nothing
@@ -26,221 +25,213 @@ notA :: Maybe String -> String
 notA = fromMaybe "a"
 
 {-
-replaceThe "the cow loves us" == "a cow loves us"
-replaceThe "Now is the time for all good men to come to the aid of their party." ==
-  "Now is a time for all good men to come to a aid of their party."
+replaceThe "the cow loves us" -- "a cow loves us"
+replaceThe "Now is the time for all good men to come to the aid of their party."
+  -- "Now is a time for all good men to come to a aid of their party."
 -}
 replaceThe :: String -> String
 replaceThe s = unwords $ map (notA . notThe) (words s)
 
 --
+
 vowels = "aeiou"
 
 -- Count the number of instances of "the" + a vowel
 {-
-countTheBeforeVowel "the cow"      == 0
-countTheBeforeVowel "the evil cow" == 1
+countTheBeforeVowel "the cow"      -- 0
+countTheBeforeVowel "the evil cow" -- 1
 -}
 countTheBeforeVowel :: String -> Integer
 countTheBeforeVowel s = go (words s) 0
-  where
-    go [] n = 0 + n
-    go (w:ws) n
-      | head w `elem` vowels = go ws (1 + n)
-      | otherwise = go ws n
+ where
+  go [] n = 0 + n
+  go (w : ws) n | head w `elem` vowels = go ws (1 + n)
+                | otherwise            = go ws n
 
 -- Return the number of vowels in a word
 {-
-countVowels "the cow"     == 2
-countVowels "Mikolajczak" == 4
+countVowels "the cow"     -- 2
+countVowels "Mikolajczak" -- 4
 -}
 countVowels :: String -> Int
 countVowels s = length $ filter (`elem` vowels) s
 
---
 -- Validate the word
---
+
 newtype Word' =
   Word' String
   deriving (Eq, Show)
 
 {-
-mkWord "ala" == Nothing
-mkWord "just" == Just (Word' "just")
+mkWord "ala"  -- Nothing
+mkWord "just" -- Just (Word' "just")
 -}
 mkWord :: String -> Maybe Word'
-mkWord s
-  | v > c = Nothing
-  | otherwise = Just $ Word' s
-  where
-    v = countVowels s
-    c = length s - v
+mkWord s | v > c     = Nothing
+         | otherwise = Just $ Word' s
+ where
+  v = countVowels s
+  c = length s - v
 
---
 -- It's only Natural
---
+
 data Nat
   = Zero
   | Succ Nat
   deriving (Eq, Show)
 
 {-
-natToInteger Zero               == 0
-natToInteger (Succ Zero)        == 1
-natToInteger (Succ (Succ Zero)) == 2
+natToInteger Zero               -- 0
+natToInteger (Succ Zero)        -- 1
+natToInteger (Succ (Succ Zero)) -- 2
 -}
 natToInteger :: Nat -> Integer
 natToInteger Zero     = 0
 natToInteger (Succ x) = 1 + natToInteger x
 
 {-
-integerToNat 0    == Just Zero
-integerToNat 1    == Just (Succ Zero)
-integerToNat 2    == Just (Succ (Succ Zero))
-integerToNat (-1) == Nothing
+integerToNat 0    -- Just Zero
+integerToNat 1    -- Just (Succ Zero)
+integerToNat 2    -- Just (Succ (Succ Zero))
+integerToNat (-1) -- Nothing
 -}
 integerToNat :: Integer -> Maybe Nat
-integerToNat i
-  | i < 0 = Nothing
-  | otherwise = Just $ go i
-  where
-    go i'
-      | i' == 0 = Zero
-      | otherwise = Succ $ go (i' - 1)
+integerToNat i | i < 0     = Nothing
+               | otherwise = Just $ go i
+ where
+  go i' | i' == 0   = Zero
+        | otherwise = Succ $ go (i' - 1)
 
---
 -- Small library for Maybe
---
-{-
-isJust2 (Just 1) == True
-isJust2 Nothing  == False
--}
-isJust2 :: Maybe a -> Bool
-isJust2 (Just _) = True
-isJust2 Nothing  = False
 
 {-
-isNothing2 (Just 1) == False
-isNothing2 Nothing  == True
+isJust' (Just 1) -- True
+isJust' Nothing  -- False
 -}
-isNothing2 :: Maybe a -> Bool
-isNothing2 = not . isJust
+isJust' :: Maybe a -> Bool
+isJust' (Just _) = True
+isJust' Nothing  = False
 
 {-
-mayybee 0 (+1) Nothing  == 0
-mayybee 0 (+1) (Just 2) == 3
+isNothing' (Just 1) -- False
+isNothing' Nothing  -- True
 -}
-mayybee :: b -> (a -> b) -> Maybe a -> b
-mayybee x f Nothing  = x
-mayybee x f (Just y) = f y
+isNothing' :: Maybe a -> Bool
+isNothing' = not . isJust'
 
 {-
-fromMaybe2 0 Nothing  == 0
-fromMaybe2 0 (Just 1) == 1
+maybe' 0 (+1) Nothing  -- 0
+maybe' 0 (+1) (Just 2) -- 3
 -}
-fromMaybe2 :: a -> Maybe a -> a
-fromMaybe2 x Nothing  = x
-fromMaybe2 x (Just y) = y
+maybe' :: b -> (a -> b) -> Maybe a -> b
+maybe' x _ Nothing  = x
+maybe' _ f (Just y) = f y
 
 {-
-fromMaybe3 0 Nothing  == 0
-fromMaybe3 0 (Just 1) == 1
+fromMaybe' 0 Nothing  -- 0
+fromMaybe' 0 (Just 1) -- 1
 -}
-fromMaybe3 :: a -> Maybe a -> a
-fromMaybe3 x = mayybee x id
+fromMaybe' :: a -> Maybe a -> a
+fromMaybe' x Nothing  = x
+fromMaybe' x (Just y) = y
 
 {-
-listToMaybe2 [1, 2, 3] == Just 1
-listToMaybe2 []        == Nothing
+fromMaybe'' 0 Nothing  -- 0
+fromMaybe'' 0 (Just 1) -- 1
+-}
+fromMaybe'' :: a -> Maybe a -> a
+fromMaybe'' x = maybe' x id
+
+{-
+listToMaybe' [1, 2, 3] -- Just 1
+listToMaybe' []        -- Nothing
  -}
-listToMaybe2 :: [a] -> Maybe a
-listToMaybe2 []     = Nothing
-listToMaybe2 (x:xs) = Just x
+listToMaybe' :: [a] -> Maybe a
+listToMaybe' []       = Nothing
+listToMaybe' (x : xs) = Just x
 
 {-
-maybeToList2 (Just 1) == [1]
-maybeToList2 Nothing  == []
+maybeToList' (Just 1) -- [1]
+maybeToList' Nothing  -- []
 -}
-maybeToList2 :: Maybe a -> [a]
-maybeToList2 Nothing  = []
-maybeToList2 (Just x) = [x]
+maybeToList' :: Maybe a -> [a]
+maybeToList' Nothing  = []
+maybeToList' (Just x) = [x]
 
 {-
-catMaybes2 [Just 1, Nothing, Just 2]   == [1, 2]
-catMaybes2 [Nothing, Nothing, Nothing] == []
+catMaybes' [Just 1, Nothing, Just 2]   -- [1, 2]
+catMaybes' [Nothing, Nothing, Nothing] -- []
 -}
-catMaybes2 :: [Maybe a] -> [a]
-catMaybes2 xs = [fromJust x | x <- xs, isJust x] -- or [x | Just x <- xs] !!!
+catMaybes' :: [Maybe a] -> [a]
+catMaybes' xs = [x | Just x <- xs]
 
 {-
-flipMaybe [Just 1, Just 2, Just 3] == Just [1, 2, 3]
-flipMaybe [Just 1, Nothing, Just 3] == Nothing
+flipMaybe [Just 1, Just 2, Just 3]  -- Just [1, 2, 3]
+flipMaybe [Just 1, Nothing, Just 3] -- Nothing
 -}
 flipMaybe :: [Maybe a] -> Maybe [a]
 flipMaybe [] = Nothing
-flipMaybe xs
-  | any isNothing xs = Nothing
-  | otherwise = Just (catMaybes2 xs)
+flipMaybe xs | any isNothing xs = Nothing
+             | otherwise        = Just (catMaybes' xs)
     -- Cheated
 
---
 -- Small library for Either
---
-{-
-lefts2 [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] == ["foo","bar","baz"]
--}
-lefts2 :: [Either a b] -> [a]
-lefts2 xs = [x | Left x <- xs]
-    -- TODO: Rewrite with foldr
 
 {-
-rights2 [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] == [3, 7]
+lefts' [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] -- ["foo","bar","baz"]
 -}
-rights2 :: [Either a b] -> [b]
-rights2 xs = [x | Right x <- xs]
-    -- TODO: Rewrite with foldr
+lefts' :: [Either a b] -> [a]
+lefts' xs = [ x | Left x <- xs ]
+    -- TODO: Rewrite with foldr - looked at a solution... YEAH, RIGHT!
 
 {-
-partitionEithers2 [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] ==
+rights' [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] -- [3, 7]
+-}
+rights' :: [Either a b] -> [b]
+rights' xs = [ x | Right x <- xs ]
+    -- TODO: Rewrite with foldr - feh
+
+{-
+partitionEithers' [Left "foo", Right 3, Left "bar", Right 7, Left "baz"] --
   (["foo","bar","baz"],[3,7])
 -}
-partitionEithers2 :: [Either a b] -> ([a], [b])
-partitionEithers2 xs = (lefts2 xs, rights2 xs)
+partitionEithers' :: [Either a b] -> ([a], [b])
+partitionEithers' xs = (lefts' xs, rights' xs)
 
 {-
-eitherMaybe (*2) (Left "foo") == Nothing
-eitherMaybe (*2) (Right 3)    == Just 6
+eitherMaybe (*2) (Left "foo") -- Nothing
+eitherMaybe (*2) (Right 3)    -- Just 6
 -}
 eitherMaybe :: (b -> c) -> Either a b -> Maybe c
-eitherMaybe _ (Left _)  = Nothing
+eitherMaybe _ (Left  _) = Nothing
 eitherMaybe f (Right y) = Just (f y)
 
 {-
-either2 length (*2) (Left "foo") == 3
-either2 length (*2) (Right 3)    == 6
+either' length (*2) (Left "foo") -- 3
+either' length (*2) (Right 3)    -- 6
 -}
-either2 :: (a -> c) -> (b -> c) -> Either a b -> c
-either2 f _ (Left x)  = f x
-either2 _ g (Right y) = g y
+either' :: (a -> c) -> (b -> c) -> Either a b -> c
+either' f _ (Left  x) = f x
+either' _ g (Right y) = g y
 
 {-
-eitherMaybe2 (*2) (Left "foo") == Nothing
-eitherMaybe2 (*2) (Right 3)    == Just 6
+eitherMaybe2 (*2) (Left "foo") -- Nothing
+eitherMaybe2 (*2) (Right 3)    -- Just 6
 -}
 eitherMaybe2 :: (b -> c) -> Either a b -> Maybe c
-eitherMaybe2 f = either2 (const Nothing) (Just . f)
+eitherMaybe2 f = either' (const Nothing) (Just . f)
     -- Cheated
 
 -- Unfolds
---
-{-
-take 10 $ myIterate (+1) 0 == [0,1,2,3,4,5,6,7,8,9]
--}
-myIterate :: (a -> a) -> a -> [a]
-myIterate f x = x : myIterate f (f x)
 
 {-
-take 10 $ myUnfoldr (\b -> Just (b, b + 1)) 0 == [0,1,2,3,4,5,6,7,8,9]
+take 10 $ iterate' (+1) 0 -- [0,1,2,3,4,5,6,7,8,9]
 -}
-myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
-myUnfoldr = undefined
+iterate' :: (a -> a) -> a -> [a]
+iterate' f x = x : iterate' f (f x)
+
+{-
+take 10 $ unfoldr' (\b -> Just (b, b + 1)) 0 -- [0,1,2,3,4,5,6,7,8,9]
+-}
+unfoldr' :: (b -> Maybe (a, b)) -> b -> [a]
+unfoldr' = undefined
