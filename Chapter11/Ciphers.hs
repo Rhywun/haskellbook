@@ -18,14 +18,14 @@ shift n c | isLower c = int2char ((char2int c + n) `mod` 26)
           | otherwise = c
 
 {-
-vigenere "ally" "meetatdawn" == "mppraeoywy"
+vigenere "ally" "meetatdawn" -- "mppraeoywy"
 -}
 vigenere :: String -> String -> String
 vigenere ks xs = map (\z -> shift (char2int $ snd z) (fst z)) zs
   where zs = zip xs $ cycle ks
 
 {-
-(unvigenere "ally" $ vigenere "ally" "meetatdawn") == "meetatdawn"
+(unvigenere "ally" $ vigenere "ally" "meetatdawn") -- "meetatdawn"
 -}
 unvigenere :: String -> String -> String
 unvigenere ks xs = map (\z -> shift (negate $ char2int $ snd z) (fst z)) zs

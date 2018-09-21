@@ -14,12 +14,14 @@ Coding along with "[Haskell Programming From First Principles](http://haskellboo
 * I have skipped the following exercises during this run-through. Maybe go back and try them later!
 
     * Chapter 10
-        * Chapter Exercises - ~~everything after rewriting `and` and `or` with folds~~ 10 and 11
+        * Chapter Exercises -
+          ~~everything after rewriting `and` and `or` with folds~~
+          10 and 11
 
     * Chapter 11
         * ~~isSubSeqOf~~
         * ~~capitalizeParagraph~~
-        * Phone Exercise (partial)
+        * ~~Phone Exercise (partial)~~
 
     * Chapter 12
         * ~~countTheBeforeVowel~~
