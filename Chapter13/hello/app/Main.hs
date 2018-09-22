@@ -6,7 +6,7 @@ import           System.IO
 
 main :: IO ()
 main = do
-  -- hSetBuffering stdout NoBuffering
+  hSetBuffering stdout NoBuffering
   putStr "Name? "
   name <- getLine
   sayHello name

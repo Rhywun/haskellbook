@@ -12,6 +12,7 @@ import           System.IO                      ( BufferMode(NoBuffering)
 -- See Chapter11/Ciphers.hs
 
 -- 2, 3
+
 palindrome :: IO ()
 palindrome = forever $ do
   hSetBuffering stdout NoBuffering

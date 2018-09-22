@@ -25,6 +25,13 @@ newtype WordList =
   WordList [String]
   deriving (Eq, Show)
 
+{-
+> (WordList ws) <- allWords
+> length ws
+235886
+> take 10 ws
+["A","a","aa","aal","aalii","aam","Aani","aardvark","aardwolf","Aaron"]
+-}
 allWords :: IO WordList
 allWords = do
   dict <- readFile "data/dict.txt"
@@ -36,7 +43,14 @@ minWordLength = 5
 maxWordLength :: Int
 maxWordLength = 9
 
--- | Filter allWords by specified length min and max
+-- Filter allWords by specified length min and max
+{-
+> (WordList gw) <- gameWords
+> length gw
+81794
+> take 10 gw
+["aalii","aardvark","aardwolf","Aaron","Aaronic","Aaronite","Ababdeh","Ababua","abaca","abacate"]
+-}
 gameWords :: IO WordList
 gameWords = do
   (WordList aw) <- allWords
@@ -44,48 +58,53 @@ gameWords = do
  where
   gameLength w = let l = length (w :: String) in l >= minWordLength && l < maxWordLength
 
-randomWord :: WordList -> IO String
-randomWord (WordList wl) = do
-  randomIndex <- randomRIO (0, length wl - 1)
-  return $ wl !! randomIndex
-
--- | Give us a random word from gameWords
-randomWord' :: IO String
-randomWord' = gameWords >>= randomWord
+-- Give us a random word from gameWords
+{-
+> randomWord
+"slapjack"
+> randomWord
+"Ephemera"
+-}
+randomWord :: IO String
+randomWord = gameWords >>= randomWord'
+ where
+  randomWord' (WordList wl) = do
+    randomIndex <- randomRIO (0, length wl - 1)
+    return $ wl !! randomIndex
 
 --
 -- 13.12 - Step Three: Making a puzzle
 --
 
 data Puzzle =
-  Puzzle String       -- ^ The word we're trying to guess
-         [Maybe Char] -- ^ The characters we've filled in so far
-         String       -- ^ Or [Char], the list of letters we've guessed so far
-         Int          -- ^ Number of incorrect guesses so far
+  Puzzle String       -- The word we're trying to guess
+         [Maybe Char] -- The characters we've filled in so far
+         String       -- Or [Char], the list of letters we've guessed so far
+         Int          -- Number of incorrect guesses so far
 
--- | Render Puzzle including charaters filled in plus characters guessed
+-- Render Puzzle including charaters filled in plus characters guessed
 instance Show Puzzle where
   show (Puzzle _ discovered guessed incorrect) =
     intersperse ' ' (fmap renderPuzzleChar discovered) ++
     " // Incorrect guesses: " ++ show incorrect ++
     " // Guessed so far: " ++ intersperse ' ' (sort guessed)
 
--- | Construct a list of Nothing, one for each char in the puzzle word
+-- Construct a list of Nothing, one for each char in the puzzle word
 {-
-freshPuzzle "hello" --> _ _ _ _ _ // Guessed so far:
+freshPuzzle "hello" -- _ _ _ _ _ // Incorrect guesses: 0 // Guessed so far:
 -}
 freshPuzzle :: String -> Puzzle
 freshPuzzle s = Puzzle s (map (const Nothing) s) [] 0
     -- Was:     Puzzle s [Nothing | _ <- s] []
 
--- | Whether the char is part of the puzzle word
+-- Whether the char is part of the puzzle word
 {-
 charInWord (freshPuzzle "hello") 'h' -- True
 -}
 charInWord :: Puzzle -> Char -> Bool
 charInWord (Puzzle w _ _ _) c = c `elem` w
 
--- | Whether the char has been guessed already
+-- Whether the char has been guessed already
 {-
 alreadyGuessed (freshPuzzle "hello") 'h' -- False
 -}
@@ -99,11 +118,11 @@ renderPuzzleChar :: Maybe Char -> Char
 renderPuzzleChar Nothing  = '_'
 renderPuzzleChar (Just c) = c
 
--- | Insert correctly guessed character into the puzzle's list of discovered chars
+-- Insert correctly guessed character into the puzzle's list of discovered chars
 {-
-p1 = fillInCharacter (freshPuzzle "hello") 'e'; p1 --> _ e _ _ _ // Guessed so far: e
-p2 = fillInCharacter p1 'l';                    p2 --> _ e l l _ // Guessed so far: e l
-p3 = fillInCharacter p2 'z';                    p3 --> _ e l l _ // Guessed so far: e l z
+p1 = fillInCharacter (freshPuzzle "hello") 'e'; p1 -- _ e _ _ _ // Guessed so far: e
+p2 = fillInCharacter p1 'l';                    p2 -- _ e l l _ // Guessed so far: e l
+p3 = fillInCharacter p2 'z';                    p3 -- _ e l l _ // Guessed so far: e l z
 -}
 fillInCharacter :: Puzzle -> Char -> Puzzle
 fillInCharacter (Puzzle word filledInSoFar s incorrect) c = Puzzle word
@@ -156,6 +175,6 @@ runGame puzzle = forever $ do
 main :: IO ()
 main = do
   putStrLn "Let's play Hangman - you get up to 7 wrong guesses!"
-  word <- randomWord'
+  word <- randomWord
   let puzzle = freshPuzzle (fmap toLower word)
   runGame puzzle
