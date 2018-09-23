@@ -1,6 +1,6 @@
-module HttpStuff where
+module Chapter21.HttpStuff where
 
-import           Data.ByteString.Lazy hiding (map)
+import           Data.ByteString.Lazy    hiding ( map )
 import           Network.Wreq
 
 -- replace with other websites if desired or needed

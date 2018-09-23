@@ -22,3 +22,6 @@ library
                    , time
                    , hspec
                    , QuickCheck
+                   , transformers
+                   , bytestring
+                   , wreq

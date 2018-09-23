@@ -1,10 +1,9 @@
-module Scratch where
+module Chapter21.Scratch where
 
 import           Data.Functor.Constant
 import           Data.Functor.Identity
 import           Data.Monoid
 
---
 {-
 class (Functor t, Foldable t) => Traversable t where
   traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
@@ -13,37 +12,40 @@ class (Functor t, Foldable t) => Traversable t where
   sequenceA :: Applicative f => t (f a) -> f (t a)
   sequenceA = traverse id
 -}
---
+
 --
 -- 21.3 - sequenceA
 --
+
 -- It flips the layers of structure around:
 {-
 sequenceA [Just 1,Just 2,Just 3] == Just [1,2,3]
 -}
---
+
 --
 -- 21.4 - traverse
 --
+
 {-
 sequenceA . fmap Just $ [1,2,3] == Just [1,2,3]
 traverse Just [1,2,3]           == Just [1,2,3]
 -}
---
+
 --
 -- 21.5 - So, what's Traversable for?
 --
+
 {-
 let f = undefined :: a -> Maybe b
 let xs = undefined :: [a]
 :t map f xs                 -- [Maybe b]
 :t traverse f xs            -- Maybe [b]
 -}
---
+
 --
 -- 21.7 - Axing tedious code
 --
---
+
 data Query =
   Query
 
@@ -74,7 +76,7 @@ pipelineFn query = do
   a <- fetchFn query
   -- case sequence (map decodeFn a) of
   case mapM decodeFn a of
-    (Left err) -> return $ Left err
+    (Left  err) -> return $ Left err
     (Right res) -> do
       a <- makeIoOnlyObj res
       return $ Right a
@@ -86,12 +88,14 @@ pipelineFn' query = do
   traverse makeIoOnlyObj (mapM decodeFn a)
 
 --
---
 -- 21.8 - Do all the things
 -- see HttpStuff.hs
 --
+
+-- `Identity` gets up something that is just `fmap` again:
 su1 = traverse (Identity . (+ 1)) [1, 2] -- Identity [2,3]
 
+-- `runIdentity` pulls the value out of `Identity`:
 su2 = runIdentity $ traverse (Identity . (+ 1)) [1, 2] -- [2,3]
 
 edgeMap :: Traversable t => (a -> b) -> t a -> t b
@@ -101,7 +105,7 @@ edgeMap f t = runIdentity $ traverse (Identity . f) t
 compare:
 map :: (a -> b) -> [a] -> [b]
 -}
---
+
 su3 = edgeMap (+ 1) [1 .. 5] -- [2,3,4,5,6]
 
 su4 = traverse (Constant . (+ 1)) ([1, 2, 3, 4, 5] :: [Sum Integer])
@@ -114,12 +118,13 @@ foldMap' f t = getConstant $ traverse (Constant . f) t
 compare:
 foldMap :: (Foldable t, Monoid m) => (a -> m) -> t a -> m
 -}
---
+
 --
 -- 21.9 - Traversable instances
 --
+
 -- Either
---
+
 data Either' a b
   = Left' a
   | Right' b
@@ -144,9 +149,8 @@ instance Traversable (Either' a) where
   traverse _ (Left' x)  = pure (Left' x)
   traverse f (Right' y) = Right' <$> f y
 
---
 -- Tuple
---
+
 data Two a b =
   Two a
       b
@@ -165,10 +169,11 @@ instance Foldable (Two a) where
 
 instance Traversable (Two a) where
   traverse f (Two x y) = Two x <$> f y
---
+
 --
 -- 21.10 - Traversable Laws
 --
+
 {-
 Naturality:
   t . traverse f = traverse (t . f)

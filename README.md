@@ -71,4 +71,8 @@ Coding along with "[Haskell Programming From First Principles](http://haskellboo
         * Chapter Exercises
             * filterF
 
+    * Chapter 21
+        * Chapter Exercises
+            * all of them
+
     *This is as far as I've progressed*
