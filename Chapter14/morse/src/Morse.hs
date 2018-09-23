@@ -4,7 +4,6 @@ module Morse
   , morseToChar
   , stringToMorse
   , morseMap
-  -- , morseToLetter
   )
 where
 
@@ -12,8 +11,8 @@ import qualified Data.Map                      as M
 
 type Morse = String
 
--- | A transliteration table of letters to Morse codes
-morseMap :: (M.Map Char Morse)
+-- A transliteration table of letters to Morse codes
+morseMap :: M.Map Char Morse
 morseMap = M.fromList
   [ ('a', ".-")
   , ('b', "-...")
@@ -53,6 +52,7 @@ morseMap = M.fromList
   , ('0', "-----")
   ]
 
+-- A transliteration table of Morse codes to letters
 letterMap :: M.Map Morse Char
 letterMap = M.foldrWithKey (flip M.insert) M.empty morseMap
 

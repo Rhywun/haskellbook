@@ -36,7 +36,7 @@ instance Arbitrary a => Arbitrary (Identity a) where
 identityGenInt :: Gen (Identity Int)
 identityGenInt = identityGen
 
--- Pair (i.e., a Product)
+-- Product - e.g. a pair
 
 data Pair a b =
   Pair a
@@ -55,7 +55,7 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Pair a b) where
 pairGenIntString :: Gen (Pair Int String)
 pairGenIntString = pairGen
 
--- Sum (e.g. Either)
+-- Sum - e.g. an either
 
 data Sum a b
   = First a

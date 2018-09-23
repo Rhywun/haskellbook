@@ -15,8 +15,10 @@ instance CoArbitrary Bool'
 {-
 sample' trueGen -- [0,-1,-2,1,-3,-3,-1,-5,-4,-8,-20]
 -}
-trueGen = coarbitrary True' arbitrary :: Gen Int
+trueGen :: Gen Int
+trueGen = coarbitrary True' arbitrary
 
-falseGen = coarbitrary False' arbitrary :: Gen Int
+falseGen :: Gen Int
+falseGen = coarbitrary False' arbitrary
 
 -- I have no idea what the point of this is.

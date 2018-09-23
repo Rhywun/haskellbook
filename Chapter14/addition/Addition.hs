@@ -8,7 +8,10 @@ import           Test.QuickCheck
 --
 
 -- Test this
-
+{-
+dividedBy 15 3 -- (5,0)
+dividedBy 22 5 -- (4,2)
+-}
 dividedBy :: Integral a => a -> a -> (a, a)
 dividedBy n d = go n d 0
  where
@@ -16,7 +19,9 @@ dividedBy n d = go n d 0
              | otherwise = go (n' - d') d' (i + 1)
 
 -- Intermission: Short Exercise - test this
-
+{-
+mult 10 2 -- 20
+-}
 mult :: Int -> Int -> Int
 mult 0 _ = 0
 mult x y = y + mult (x - 1) y
@@ -71,6 +76,18 @@ genChar = elements ['a' .. 'z']
 
 genChar' :: Gen Char
 genChar' = choose ('A', 'Z')
+
+{-
+sample' gen2ple'
+  -- [(0,0.0),(-2,4.528139e-2),(-3,0.8527228),(-5,-6.0497985),(2,-9.78754),...]
+-}
+gen2ple' :: Gen (Int, Float)
+gen2ple' = do
+  a <- arbitrary
+  b <- arbitrary
+  return (a, b)
+
+-- Generators with polymorphic type arguments
 
 {-
 sample' (gen2ple :: Gen ([()], Char))

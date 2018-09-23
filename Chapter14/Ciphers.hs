@@ -1,6 +1,9 @@
 module Chapter14.Ciphers where
 
-import           Data.Char       (chr, isLower, ord)
+import           Data.Char                      ( chr
+                                                , isLower
+                                                , ord
+                                                )
 import           Test.QuickCheck
 
 -- Using `listof1` for non-empty list
@@ -12,7 +15,7 @@ genWord :: Gen String
 genWord = listOf1 $ elements ['a' .. 'z']
 
 -- Caesar
---
+
 genShift :: Gen Int
 genShift = elements [0 .. 25]
 
@@ -23,18 +26,16 @@ genCaesarParams = do
   return (a, b)
 
 caesar :: Int -> String -> String
-caesar n = map (\ x -> chr $ mod (ord x + n - a) 26 + a)
-  where
-    a = ord 'a'
+caesar n = map (\x -> chr $ mod (ord x + n - a) 26 + a) where a = ord 'a'
 
 uncaesar :: Int -> String -> String
 uncaesar n = caesar (-n)
 
 caesarProp :: Property
-caesarProp =
-  forAll genCaesarParams (\(n, xs) -> uncaesar n (caesar n xs) == xs)
+caesarProp = forAll genCaesarParams (\(n, xs) -> uncaesar n (caesar n xs) == xs)
 
 -- Vigenere
+
 genVigenereParams :: Gen (String, String)
 genVigenereParams = do
   a <- genWord
@@ -52,28 +53,27 @@ int2char n = chr (ord 'a' + n)
 -- Shifts char c to the right by n letters; operates only on
 -- lower-case letters; wraps at alphabet end
 shift :: Int -> Char -> Char
-shift n c
-  | isLower c = int2char ((char2int c + n) `mod` 26)
-  | otherwise = c
+shift n c | isLower c = int2char ((char2int c + n) `mod` 26)
+          | otherwise = c
 
 {-
 vigenere "ally" "meetatdawn" = "mppraeoywy"
 -}
 vigenere :: String -> String -> String
 vigenere ks xs = map (\z -> shift (char2int $ snd z) (fst z)) zs
-  where
-    zs = zip xs $ cycle ks
+  where zs = zip xs $ cycle ks
 
 unvigenere :: String -> String -> String
 unvigenere ks xs = map (\z -> shift (negate $ char2int $ snd z) (fst z)) zs
-  where
-    zs = zip xs $ cycle ks
+  where zs = zip xs $ cycle ks
 
 vigenereProp :: Property
 vigenereProp =
   forAll genVigenereParams (\(ks, xs) -> unvigenere ks (vigenere ks xs) == xs)
 
 --
+--
+
 runQC = do
   quickCheck caesarProp
   quickCheck vigenereProp

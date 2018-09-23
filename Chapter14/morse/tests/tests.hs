@@ -1,14 +1,14 @@
 module Main where
 
-import qualified Data.Map                      as Map
+import qualified Data.Map                      as M
 import           Morse
 import           Test.QuickCheck
 
 allowedChars :: String
-allowedChars = Map.keys morseMap
+allowedChars = M.keys morseMap
 
 allowedMorse :: [Morse]
-allowedMorse = Map.elems morseMap
+allowedMorse = M.elems morseMap
 
 charGen :: Gen Char
 charGen = elements allowedChars
