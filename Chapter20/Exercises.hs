@@ -1,10 +1,10 @@
-module Exercises where
+module Chapter20.Exercises where
 
 import           Data.Foldable
 import           Data.Monoid
 
 -- 1
---
+
 newtype Constant a b =
   Constant b
   deriving (Eq, Show)
@@ -17,7 +17,7 @@ instance Foldable (Constant a) where
   foldMap f (Constant x) = f x
 
 -- 2
---
+
 data Two a b =
   Two a
       b
@@ -31,7 +31,7 @@ instance Foldable (Two a) where
   foldMap f (Two _ y) = f y
 
 -- 3
---
+
 data Three a b c =
   Three a
         b
@@ -45,7 +45,7 @@ instance Foldable (Three a b) where
   foldMap f (Three _ _ z) = f z
 
 -- 4
---
+
 data Three' a b =
   Three' a
          b
@@ -59,7 +59,7 @@ instance Foldable (Three' a) where
   foldMap f (Three' _ y z) = f y <> f z
 
 -- 5
---
+
 data Four a b =
   Four a
        b
@@ -73,7 +73,6 @@ foldr (*) 2 (Four 3 4 5 6) == 240 -- i.e. 2 * (4 * 5 * 6)
 instance Foldable (Four a) where
   foldMap f (Four _ x y z) = f x <> f y <> f z
 
---
 -- PASS
 filterF ::
      (Applicative f, Foldable t, Monoid (f a)) => (a -> Bool) -> t a -> f a

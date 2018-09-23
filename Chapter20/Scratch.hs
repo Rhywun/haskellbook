@@ -1,4 +1,4 @@
-module Scratch where
+module Chapter20.Scratch where
 
 import           Data.Foldable
 import           Data.Monoid
@@ -6,10 +6,10 @@ import           Data.Monoid
 --
 -- 20.3 - Revenge of the monoids
 --
---
+
 -- `fold` requires a structure (e.g. list) of Monoids
 -- fold :: (Monoid m, Foldable t) => t m -> m
---
+
 -- Sometimes, we have to specify the Monoid explicitly - such as `Sum`:
 -- (Remember, `Sum` here is the data constructor of type `Sum`)
 rm01 = fold $ map Sum [1 .. 5] -- Sum {getSum = 15}
@@ -22,7 +22,7 @@ rm03 = fold ["hello", "julie"] -- "hellojulie"
 
 -- `foldMap` specifies a function that explicitly maps to a Monoid
 -- foldMap :: (Monoid m, Foldable t) => (a -> m) -> t a -> m
---
+
 rm04 = foldMap Sum [1 .. 5] -- Sum {getSum = 15}
 
 rm05 = foldMap Product [1 .. 5] -- Product {getProduct = 120}
@@ -36,7 +36,7 @@ rm08 = foldMap First [Just 1, Nothing, Just 5] -- First {getFirst = Just 1}
 rm09 = foldMap Last [Just 1, Nothing, Just 5] -- Last {getLast = Just 5}
 
 -- We can also give it a function that's not the Monoid it's using:
---
+
 rm10 = foldMap (* 5) $ map Product [1 .. 3] -- Product {getProduct = 750}
   -- i.e. (1 * 5) * (2 * 5) * (3 * 5)
   --         5    *    10   *    15
@@ -45,12 +45,12 @@ rm11 = foldMap (* 5) $ map Sum [1 .. 3] -- Sum {getSum = 30}, i.e. 5 + 10 + 15
 
 -- Compare to `foldr`
 -- The Monoid instance is baked in to the function
---
+
 rm12 = foldr (*) 5 [1, 2, 3] -- 30
   -- i.e. 5 * (1 * 2 * 3)
 
 -- In fact, an implied Monoid (e.g. Sum or Product) is ignored:
---
+
 rm13 = foldr (*) 3 $ map Sum [2 .. 4] -- Sum {getSum = 72}
   -- i.e. 3 * (2 * 3 * 4)
 
@@ -59,13 +59,13 @@ rm14 = foldr (*) 3 $ map Product [2 .. 4] -- Product {getProduct = 72}
 
 -- Folding over one value also ignores an explicit Monoid instance:
 -- (Note that the explicit instance is required to satisfy the type-checker)
---
+
 rm15 = foldMap (* 5) (Just 100) :: Product Integer -- Product {getProduct = 500}
 
 rm16 = foldMap (* 5) (Just 5) :: Sum Integer -- Sum {getSum = 25}
 
 -- `mempty` comes into play when you're folding over something empty:
---
+
 rm17 = foldMap (* 5) Nothing :: Sum Integer -- Sum {getSum = 0}
 
 rm18 = foldMap (* 5) Nothing :: Product Integer -- Product {getProduct = 1}
@@ -73,9 +73,9 @@ rm18 = foldMap (* 5) Nothing :: Product Integer -- Product {getProduct = 1}
 --
 -- 20.4 - Demonstrating Foldable instances
 --
---
+
 -- Identity
---
+
 newtype Identity a =
   Identity a
   deriving (Eq, Show)
@@ -90,7 +90,7 @@ instance Foldable Identity where
   foldMap f (Identity x) = f x
 
 -- "Maybe"
---
+
 data Optional a
   = Nada
   | Yep a
@@ -112,7 +112,7 @@ instance Foldable Optional where
 --
 -- 20.5 - Some basic derived operations
 --
---
+
 toList1 = toList (Just 1) -- [1]
 
 toList2 = map toList [Just 1, Just 2, Just 3] -- [[1],[2],[3]]
@@ -188,9 +188,8 @@ product2 = fmap product (Just []) -- Just 1
 
 product3 = fmap product (Right [1, 2, 3]) -- Right 6
 
---
 -- Exercises: Library Functions
---
+
 -- 1
 {-
 sum' [1,2,3] == 6
