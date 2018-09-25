@@ -161,3 +161,23 @@ getDogR' pers -- Dog {dogsName = DogName "Barkley", dogsAddress = Address "Sesam
 -}
 getDogR' :: Person -> Dog
 getDogR' = liftA2 Dog dogName address
+
+--
+-- 22.7 - The Monad of functions
+--
+
+{-
+getDogRM pers -- Dog {dogsName = DogName "Barkley", dogsAddress = Address "Sesame Street"}
+-}
+getDogRM :: Person -> Dog
+getDogRM = do
+  name <- dogName
+  addy <- address
+  return $ Dog name addy
+
+{-
+getDogRM' pers -- Dog {dogsName = DogName "Barkley", dogsAddress = Address "Sesame Street"}
+-}
+getDogRM' :: Person -> Dog
+getDogRM' = dogName >>= \name -> address >>= \addy -> return $ Dog name addy
+

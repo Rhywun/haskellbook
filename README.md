@@ -76,7 +76,9 @@ Coding along with "[Haskell Programming From First Principles](http://haskellboo
             * all of them
 
     * Chapter 22
-        * Exercise: Ask - don't quite understand
-        *
+        * all
+
+    * Chapter 23
+        * all
 
     *This is as far as I've progressed*
