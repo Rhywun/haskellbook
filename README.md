@@ -81,4 +81,8 @@ Coding along with "[Haskell Programming From First Principles](http://haskellboo
     * Chapter 23
         * all
 
+    * Chapter 24
+        * all exercises from section 8 forward
+        * all Chapter Exercises
+
     *This is as far as I've progressed*
