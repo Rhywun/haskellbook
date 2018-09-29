@@ -27,3 +27,7 @@ library
                    , wreq
                    , mtl
                    , random
+                   , trifecta
+                   , raw-strings-qq
+                   , containers
+                   , text
