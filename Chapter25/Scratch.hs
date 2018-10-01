@@ -2,6 +2,8 @@
 
 module Chapter25.Scratch where
 
+import Control.Monad
+
 --
 -- 25.1 - Composing types
 --
@@ -134,6 +136,7 @@ instance Functor Identity where
 -}
 
 instance (Functor m) => Functor (IdentityT m) where
+  fmap :: (a -> b) -> IdentityT m a -> IdentityT m b
   fmap f (IdentityT fa) = IdentityT (fmap f fa)
 
 -- Review:
@@ -145,13 +148,13 @@ instance Applicative Identity where
 -}
 
 instance (Applicative m) => Applicative (IdentityT m) where
+  pure :: a -> IdentityT m a
   pure x = IdentityT (pure x)
 
+  (<*>) :: IdentityT m (a -> b) -> IdentityT m a -> IdentityT m b
   (IdentityT fab) <*> (IdentityT fa) = IdentityT (fab <*> fa)
---           ^^^
---        m (a -> b)
 
--- Yada yada
+-- Review:
 {-
 instance Monad Identity where
   return = pure
@@ -159,12 +162,10 @@ instance Monad Identity where
   (Identity a) >>= f = f a
 -}
 
+-- See text for how to write this...
 instance (Monad m) => Monad (IdentityT m) where
+  return :: a -> IdentityT m a
   return = pure
 
   (>>=) :: IdentityT m a -> (a -> IdentityT m b) -> IdentityT m b
-  -- (IdentityT ma) >>= f = IdentityT $ ma >>= runIdentityT . f
-  (IdentityT ma) >>= f = undefined
-
---
--- totally lost
+  (IdentityT ma) >>= f = IdentityT $ ma >>= runIdentityT . f
