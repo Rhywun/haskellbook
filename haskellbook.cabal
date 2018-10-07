@@ -31,3 +31,21 @@ library
                    , raw-strings-qq
                    , containers
                    , text
+
+executable bench
+  main-is:           Main.hs
+  other-modules:     Paths_haskellbook
+  hs-source-dirs:    Chapter28/bench
+  default-language:  Haskell2010
+  ghc-options:       -O2
+  build-depends:     base >=4.7 && <5
+                   , criterion
+
+executable profiling
+  main-is:           Main.hs
+  other-modules:     Paths_haskellbook
+  hs-source-dirs:    Chapter28/profiling
+  default-language:  Haskell2010
+  ghc-options:       -prof -fprof-auto -rtsopts -O2
+  build-depends:     base >=4.7 && <5
+
